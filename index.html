@@ -887,7 +887,7 @@ body.dark-mode .dt td span[style*="color:var(--txt2)"] { color: #9ca3af !importa
  <div class="g4" style="margin-bottom:16px" id="ecm-stats">
   <div class="card-sm"><div class="stat-label">Total Reports</div><div class="stat-val" id="ecm-total">0</div></div>
   <div class="card-sm"><div class="stat-label">This Year</div><div class="stat-val" id="ecm-year">0</div></div>
-  <div class="card-sm"><div class="stat-label">Total CBVs Reported</div><div class="stat-val" id="ecm-cbvs">0</div></div>
+  <div class="card-sm"><div class="stat-label">CBVs Reporting (Latest Month)</div><div class="stat-val" id="ecm-cbvs">0</div></div>
   <div class="card-sm"><div class="stat-label">Children Enrolled</div><div class="stat-val" id="ecm-children">0</div></div>
  </div>
  <div class="toolbar">
@@ -12586,7 +12586,12 @@ function renderECDMonthly(){
   var _ecmAll = (_store['ecd_monthly']&&_store['ecd_monthly'].length)?_store['ecd_monthly']:DB.get('ecd_monthly');
   var cy = new Date().getFullYear().toString();
   var _ecmYear = _ecmAll.filter(function(r){return r.period&&r.period.startsWith(cy);});
-  var _totalCBVs = _ecmAll.reduce(function(a,r){return a+(r.cbvRepM||0)+(r.cbvRepF||0);},0);
+  // Show CURRENT active CBVs (from the most recent monthly report), not a running
+  // total across all months — the same CBVs report every month, so summing every
+  // month's headcount together was inflating this number incorrectly.
+  var _sortedByPeriod = [..._ecmAll].sort(function(a,b){ return (a.period||'').localeCompare(b.period||''); });
+  var _latestECM = _sortedByPeriod[_sortedByPeriod.length-1] || {};
+  var _totalCBVs = (_latestECM.cbvRepM||0) + (_latestECM.cbvRepF||0);
   var _totalChildren = _ecmAll.reduce(function(a,r){return a+(r.childTotalM||0)+(r.childTotalF||0);},0);
   var elT=document.getElementById('ecm-total'); if(elT) elT.textContent=_ecmAll.length;
   var elY=document.getElementById('ecm-year'); if(elY) elY.textContent=_ecmYear.length;
