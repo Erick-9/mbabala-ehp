@@ -102,7 +102,8 @@ Object.assign(PAGE_TITLES || {}, {
 // ════ NEW MODULE STORE SETUP ════
 const _newStores2 = ['cbv','chw','chw_activities','chw_supervision','meetings','attendance',
   'foodhandlers','waterpoints','schools','school_inspections',
-  'stock','stock_movements','under5','u5_milestones','mal_outcomes'];
+  'stock','stock_movements','under5','u5_milestones','mal_outcomes',
+  'ipc_departments','ipc_checklist_categories','ipc_checklist_items','ipc_audits','ipc_capa'];
 _newStores2.forEach(k => { if(!_store[k]) _store[k]=[]; });
 
 Object.assign(PREFIX_MAP, {
@@ -851,7 +852,8 @@ body.dark-mode .dt td span[style*="color:var(--txt2)"] { color: #9ca3af !importa
         style="width:100%;padding:13px;background:var(--green);color:#fff;border:none;border-radius:10px;font-size:15px;font-weight:600;cursor:pointer">✅ Reset Password</button> </div> <button onclick="closeForgotPassword()"
       style="width:100%;padding:11px;margin-top:12px;background:none;border:1.5px solid var(--bd);border-radius:10px;font-size:14px;color:var(--txt2);cursor:pointer">Cancel</button> </div>
 </div> <div id="print-overlay"></div>
-<div id="app"> <div class="topbar"> <button class="topbar-menu" onclick="toggleSidebar()" title="Menu">☰</button> <div class="topbar-title" id="page-title">Dashboard</div> <div class="topbar-right"> <span id="sync-status" style="font-size:11px;padding:4px 9px;border-radius:10px;background:rgba(255,255,255,.15);color:#fff">● Online</span> <button id="dark-mode-btn" onclick="toggleDarkMode()" title="Switch to dark mode" style="background:rgba(255,255,255,.18);border:1.5px solid rgba(255,255,255,.4);cursor:pointer;font-size:15px;color:#fff;padding:4px 10px;border-radius:8px;line-height:1.2">🌙</button> <button class="topbar-btn export-btn" onclick="exportAllData()">⬇ Export</button> <button class="topbar-btn new" id="new-btn" onclick="openNewModal()">+ New</button> <div class="avatar" onclick="nav('admin')" id="user-avatar" title="Profile">EH</div> <button onclick="doLogout()" title="Log out" style="display:flex;align-items:center;gap:6px;padding:7px 14px;border-radius:20px;border:1.5px solid rgba(255,255,255,0.25);background:rgba(220,38,38,0.15);color:#fff;font-size:12px;font-weight:600;cursor:pointer;transition:all .2s;letter-spacing:.02em" onmouseover="this.style.background='rgba(220,38,38,0.35)';this.style.borderColor='rgba(220,38,38,0.6)'" onmouseout="this.style.background='rgba(220,38,38,0.15)';this.style.borderColor='rgba(255,255,255,0.25)'"><span style="font-size:14px">&#x23FB;</span> Logout</button> </div> </div> <div class="app-body"> <div class="sidebar-overlay" id="sidebar-overlay" onclick="closeSidebar()"></div> <div class="sidebar" id="sidebar"> <div class="sidebar-facility"> <div class="facility-badge"> <div class="facility-icon">EH</div> <div> <div class="facility-name" id="sb-facility-name">Mbabala RHC</div> <div class="facility-sub" id="sb-facility-sub">Chifunabuli District</div> </div> </div> </div> <nav class="nav" id="nav"> <div class="nav-section collapsed" onclick="toggleNavSection(this)">Overview</div><div class="nav-group collapsed"> <div class="nav-item active" onclick="nav('dashboard')"><span class="nav-icon">🏠</span><span class="nav-label">Dashboard</span></div> <div class="nav-item" onclick="nav('planner')"><span class="nav-icon">📅</span><span class="nav-label">Work Planner</span></div> <div class="nav-item" onclick="nav('work-schedule')"><span class="nav-icon">🗓️</span><span class="nav-label">Work Schedule</span></div> <div class="nav-item" onclick="nav('targets')"><span class="nav-icon">&#127919;</span><span class="nav-label">Targets &amp; Achievement</span></div> <div class="nav-item" onclick="nav('monthly-report')"><span class="nav-icon">📊</span><span class="nav-label">Monthly Report Card</span></div> <div class="nav-item" onclick="nav('catchment')"><span class="nav-icon">🏘️</span><span class="nav-label">Catchment Profile</span></div> </div><div class="nav-section collapsed" onclick="toggleNavSection(this)">EH Reports</div><div class="nav-group collapsed"> <div class="nav-item" onclick="nav('inspections')"><span class="nav-icon">✅</span><span class="nav-label">Inspections</span></div> <div class="nav-item" onclick="nav('insp-followup')"><span class="nav-icon">🔍</span><span class="nav-label">Inspection Follow-up</span></div> <div class="nav-item" onclick="nav('incidents')"><span class="nav-icon">⚠️</span><span class="nav-label">Incidents / Hazards</span></div> <div class="nav-item" onclick="nav('immunization')"><span class="nav-icon">💉</span><span class="nav-label">Immunization (EPI)</span></div> <div class="nav-item" onclick="nav('hia')"><span class="nav-icon">📋</span><span class="nav-label">HIA 1 &amp; 2</span></div> <div class="nav-item" onclick="nav('water')"><span class="nav-icon">💧</span><span class="nav-label">Water Quality</span></div> <div class="nav-item" onclick="nav('ebs')"><span class="nav-icon">📡</span><span class="nav-label">EBS / EMS</span></div> <div class="nav-item" onclick="nav('ipc')"><span class="nav-icon">🛡️</span><span class="nav-label">IPC Reports</span></div> <div class="nav-item" onclick="nav('waste')"><span class="nav-icon">♻️</span><span class="nav-label">Waste Management</span></div> <div class="nav-item" onclick="nav('vector')"><span class="nav-icon">🦟</span><span class="nav-label">Vector Control</span></div> <div class="nav-item" onclick="nav('sanitation')"><span class="nav-icon">🚽</span><span class="nav-label">Sanitation (ODF)</span></div> <div class="nav-item" onclick="nav('mrr')"><span class="nav-icon">🦟</span><span class="nav-label">Malaria (MRR)</span></div> <div class="nav-item" onclick="nav('surveillance')"><span class="nav-icon">🔬</span><span class="nav-label">Surveillance</span></div> <div class="nav-item" onclick="nav('disease-register')"><span class="nav-icon">📈</span><span class="nav-label">Disease Register</span></div> <div class="nav-item" onclick="nav('health_promo')"><span class="nav-icon">📢</span><span class="nav-label">Health Promotion</span></div> <div class="nav-item" onclick="nav('complaints')"><span class="nav-icon">📋</span><span class="nav-label">Complaint Register</span></div> </div><div class="nav-section collapsed" onclick="toggleNavSection(this)">Nutrition &amp; Child Health</div><div class="nav-group collapsed"> <div class="nav-item" onclick="nav('nutrition')"><span class="nav-icon">🥗</span><span class="nav-label">Nutrition</span></div> <div class="nav-item" onclick="nav('ecd')"><span class="nav-icon">🧒</span><span class="nav-label">ECD Activities</span></div>
+<div id="app"> <div class="topbar"> <button class="topbar-menu" onclick="toggleSidebar()" title="Menu">☰</button> <div class="topbar-title" id="page-title">Dashboard</div> <div class="topbar-right"> <span id="sync-status" style="font-size:11px;padding:4px 9px;border-radius:10px;background:rgba(255,255,255,.15);color:#fff">● Online</span> <button id="dark-mode-btn" onclick="toggleDarkMode()" title="Switch to dark mode" style="background:rgba(255,255,255,.18);border:1.5px solid rgba(255,255,255,.4);cursor:pointer;font-size:15px;color:#fff;padding:4px 10px;border-radius:8px;line-height:1.2">🌙</button> <button class="topbar-btn export-btn" onclick="exportAllData()">⬇ Export</button> <button class="topbar-btn new" id="new-btn" onclick="openNewModal()">+ New</button> <div class="avatar" onclick="nav('admin')" id="user-avatar" title="Profile">EH</div> <button onclick="doLogout()" title="Log out" style="display:flex;align-items:center;gap:6px;padding:7px 14px;border-radius:20px;border:1.5px solid rgba(255,255,255,0.25);background:rgba(220,38,38,0.15);color:#fff;font-size:12px;font-weight:600;cursor:pointer;transition:all .2s;letter-spacing:.02em" onmouseover="this.style.background='rgba(220,38,38,0.35)';this.style.borderColor='rgba(220,38,38,0.6)'" onmouseout="this.style.background='rgba(220,38,38,0.15)';this.style.borderColor='rgba(255,255,255,0.25)'"><span style="font-size:14px">&#x23FB;</span> Logout</button> </div> </div> <div class="app-body"> <div class="sidebar-overlay" id="sidebar-overlay" onclick="closeSidebar()"></div> <div class="sidebar" id="sidebar"> <div class="sidebar-facility"> <div class="facility-badge"> <div class="facility-icon">EH</div> <div> <div class="facility-name" id="sb-facility-name">Mbabala RHC</div> <div class="facility-sub" id="sb-facility-sub">Chifunabuli District</div> </div> </div> </div> <nav class="nav" id="nav"> <div class="nav-section collapsed" onclick="toggleNavSection(this)">Overview</div><div class="nav-group collapsed"> <div class="nav-item active" onclick="nav('dashboard')"><span class="nav-icon">🏠</span><span class="nav-label">Dashboard</span></div> <div class="nav-item" onclick="nav('planner')"><span class="nav-icon">📅</span><span class="nav-label">Work Planner</span></div> <div class="nav-item" onclick="nav('work-schedule')"><span class="nav-icon">🗓️</span><span class="nav-label">Work Schedule</span></div> <div class="nav-item" onclick="nav('targets')"><span class="nav-icon">&#127919;</span><span class="nav-label">Targets &amp; Achievement</span></div> <div class="nav-item" onclick="nav('monthly-report')"><span class="nav-icon">📊</span><span class="nav-label">Monthly Report Card</span></div> <div class="nav-item" onclick="nav('catchment')"><span class="nav-icon">🏘️</span><span class="nav-label">Catchment Profile</span></div> </div><div class="nav-section collapsed" onclick="toggleNavSection(this)">EH Reports</div><div class="nav-group collapsed"> <div class="nav-item" onclick="nav('inspections')"><span class="nav-icon">✅</span><span class="nav-label">Inspections</span></div> <div class="nav-item" onclick="nav('insp-followup')"><span class="nav-icon">🔍</span><span class="nav-label">Inspection Follow-up</span></div> <div class="nav-item" onclick="nav('incidents')"><span class="nav-icon">⚠️</span><span class="nav-label">Incidents / Hazards</span></div> <div class="nav-item" onclick="nav('immunization')"><span class="nav-icon">💉</span><span class="nav-label">Immunization (EPI)</span></div> <div class="nav-item" onclick="nav('hia')"><span class="nav-icon">📋</span><span class="nav-label">HIA 1 &amp; 2</span></div> <div class="nav-item" onclick="nav('water')"><span class="nav-icon">💧</span><span class="nav-label">Water Quality</span></div> <div class="nav-item" onclick="nav('ebs')"><span class="nav-icon">📡</span><span class="nav-label">EBS / EMS</span></div> <div class="nav-item" onclick="nav('ipc')"><span class="nav-icon">🛡️</span><span class="nav-label">IPC Reports</span></div>
+<div class="nav-item" onclick="nav('ipc-audit')"><span class="nav-icon">📋</span><span class="nav-label">IPC Audit System</span></div> <div class="nav-item" onclick="nav('waste')"><span class="nav-icon">♻️</span><span class="nav-label">Waste Management</span></div> <div class="nav-item" onclick="nav('vector')"><span class="nav-icon">🦟</span><span class="nav-label">Vector Control</span></div> <div class="nav-item" onclick="nav('sanitation')"><span class="nav-icon">🚽</span><span class="nav-label">Sanitation (ODF)</span></div> <div class="nav-item" onclick="nav('mrr')"><span class="nav-icon">🦟</span><span class="nav-label">Malaria (MRR)</span></div> <div class="nav-item" onclick="nav('surveillance')"><span class="nav-icon">🔬</span><span class="nav-label">Surveillance</span></div> <div class="nav-item" onclick="nav('disease-register')"><span class="nav-icon">📈</span><span class="nav-label">Disease Register</span></div> <div class="nav-item" onclick="nav('health_promo')"><span class="nav-icon">📢</span><span class="nav-label">Health Promotion</span></div> <div class="nav-item" onclick="nav('complaints')"><span class="nav-icon">📋</span><span class="nav-label">Complaint Register</span></div> </div><div class="nav-section collapsed" onclick="toggleNavSection(this)">Nutrition &amp; Child Health</div><div class="nav-group collapsed"> <div class="nav-item" onclick="nav('nutrition')"><span class="nav-icon">🥗</span><span class="nav-label">Nutrition</span></div> <div class="nav-item" onclick="nav('ecd')"><span class="nav-icon">🧒</span><span class="nav-label">ECD Activities</span></div>
  <div class="nav-item" onclick="nav('ecd-monthly')"><span class="nav-icon">📊</span><span class="nav-label">ECD Monthly Report</span></div> <div class="nav-item" onclick="nav('mycin')"><span class="nav-icon">🤱</span><span class="nav-label">MYCIN Nutrition</span></div> <div class="nav-item" onclick="nav('under5')"><span class="nav-icon">👶</span><span class="nav-label">Under Five Coverage</span></div> <div class="nav-item" onclick="nav('defaulters')"><span class="nav-icon">📊</span><span class="nav-label">Malnutrition Outcome</span></div> <div class="nav-item" onclick="nav('followup')"><span class="nav-icon">&#128276;</span><span class="nav-label">Defaulter Follow-up</span></div> </div><div class="nav-section collapsed" onclick="toggleNavSection(this)">Legal &amp; Investigations</div><div class="nav-group collapsed"> <div class="nav-item" onclick="nav('legal')"><span class="nav-icon">⚖️</span><span class="nav-label">Legal / Enforcement</span></div> <div class="nav-item" onclick="nav('routine')"><span class="nav-icon">📅</span><span class="nav-label">Routine EH Reports</span></div> <div class="nav-item" onclick="nav('outbreak')"><span class="nav-icon">🦠</span><span class="nav-label">Outbreak Investigation</span></div> </div><div class="nav-section collapsed" onclick="toggleNavSection(this)">Community</div><div class="nav-group collapsed"> <div class="nav-item" onclick="nav('cbv')"><span class="nav-icon">🤝</span><span class="nav-label">CBV Register</span></div> <div class="nav-item" onclick="nav('chw')"><span class="nav-icon">👥</span><span class="nav-label">CHW Register</span></div> <div class="nav-item" onclick="nav('villages')"><span class="nav-icon">🏘️</span><span class="nav-label">Village Register</span></div> <div class="nav-item" onclick="nav('households')"><span class="nav-icon">🏠</span><span class="nav-label">Households</span></div> <div class="nav-item" onclick="nav('meetings')"><span class="nav-icon">📝</span><span class="nav-label">Meetings &amp; Training</span></div> <div class="nav-item" onclick="nav('scorecard')"><span class="nav-icon">📋</span><span class="nav-label">Community Scorecard</span></div>
 <div class="nav-item" onclick="nav('committees')"><span class="nav-icon">🏛️</span><span class="nav-label">Committees</span></div>
  <div class="nav-item" onclick="nav('village-visits')"><span class="nav-icon">🏘️</span><span class="nav-label">Village Visit Tracker</span></div> </div><div class="nav-section collapsed" onclick="toggleNavSection(this)">Facilities &amp; Infrastructure</div><div class="nav-group collapsed"> <div class="nav-item" onclick="nav('facilities')"><span class="nav-icon">🏥</span><span class="nav-label">Facilities</span></div> <div class="nav-item" onclick="nav('schools')"><span class="nav-icon">🏫</span><span class="nav-label">School Health</span></div> <div class="nav-item" onclick="nav('waterpoints')"><span class="nav-icon">🚰</span><span class="nav-label">Water Points</span></div> <div class="nav-item" onclick="nav('premises')"><span class="nav-icon">🏬</span><span class="nav-label">Premises</span></div> <div class="nav-item" onclick="nav('foodhandlers')"><span class="nav-icon">🍽️</span><span class="nav-label">Food Handlers</span></div> </div><div class="nav-section collapsed" onclick="toggleNavSection(this)">Resources</div><div class="nav-group collapsed"> <div class="nav-item" onclick="nav('stock')"><span class="nav-icon">📦</span><span class="nav-label">Stock &amp; Supplies</span></div> <div class="nav-item" onclick="nav('documents')"><span class="nav-icon">📁</span><span class="nav-label">Documents</span></div> </div><div class="nav-section collapsed" onclick="toggleNavSection(this)">System</div><div class="nav-group collapsed"> <div class="nav-item" onclick="nav('analytics')"><span class="nav-icon">📈</span><span class="nav-label">Analytics</span></div> <div class="nav-item" onclick="nav('admin')"><span class="nav-icon">⚙️</span><span class="nav-label">Administration</span></div> </div></nav> <div class="sidebar-bottom" style="padding:12px 10px;border-top:1px solid rgba(255,255,255,.08)"> <div style="display:flex;align-items:center;gap:10px;padding:8px 6px;border-radius:10px;background:rgba(255,255,255,0.06);margin-bottom:8px"> <div id="sb-avatar" style="width:34px;height:34px;border-radius:50%;background:linear-gradient(135deg,#0d9488,#0a5448);display:flex;align-items:center;justify-content:center;font-size:13px;font-weight:700;color:#fff;flex-shrink:0">EH</div> <div style="overflow:hidden;flex:1"> <div id="sb-user-name" style="font-size:12px;font-weight:700;color:#fff;white-space:nowrap;overflow:hidden;text-overflow:ellipsis"></div> <div id="sb-user-role" style="font-size:10px;color:rgba(255,255,255,.5);margin-top:1px"></div> </div> <div id="sb-online-dot" style="width:8px;height:8px;border-radius:50%;background:#22c55e;flex-shrink:0" title="Online"></div> </div> <div style="font-size:10px;color:rgba(255,255,255,.5);text-align:center">EH Platform v3.0 · Mbabala RHC · 2026</div> </div> </div> <div class="main"> <div class="offline-banner" id="offline-banner">⚠ You are offline — data saves locally</div> <div class="content" id="content"> <div id="page-dashboard" class="page active"> <div id="dash-welcome" style="background:linear-gradient(135deg,var(--teal-d),var(--teal));border-radius:var(--rl);padding:16px 18px;margin-bottom:18px;display:flex;align-items:flex-start;justify-content:space-between;flex-wrap:nowrap;gap:8px"> <div> <div style="color:rgba(255,255,255,.7);font-size:12px;text-transform:uppercase;letter-spacing:.08em;margin-bottom:4px">Environmental Health Management Platform</div> <div id="dash-greeting" style="color:#fff;font-size:clamp(14px,4vw,20px);font-weight:700">Good morning 👋</div> <div id="dash-date" style="color:rgba(255,255,255,.8);font-size:13px;margin-top:2px"></div> </div> <div style="text-align:right;flex-shrink:0"> <div style="color:rgba(255,255,255,.7);font-size:10px;text-transform:uppercase;letter-spacing:.06em">Mbabala Rural Health Centre</div> <div style="color:#fff;font-size:11px;margin-top:2px">Chifunabuli · Luapula</div> <div id="dash-online-badge" style="margin-top:6px"></div> </div> </div> <div id="dash-stats" style="margin-bottom:18px"></div> <div id="dash-alerts-section" style="margin-bottom:18px"></div> <div style="display:grid;grid-template-columns:1fr 1fr;gap:14px;margin-bottom:18px"> <div class="card"> <div class="card-title">🔔 Overdue Follow-ups &amp; Alerts</div> <div id="dash-overdue-alerts"><div style="color:var(--txt2);font-size:12px;padding:8px 0">Loading...</div></div> </div> <div class="card"> <div class="card-title">📦 Stock Alerts</div> <div id="dash-stock-alerts"><div style="color:var(--txt2);font-size:12px;padding:8px 0">Loading...</div></div> </div> </div> <div style="display:grid;grid-template-columns:1fr 1fr;gap:14px;margin-bottom:14px"> <div class="card" style="align-self:start"> <div class="card-title">📊 Compliance Overview</div> <div id="compliance-bars" style="display:flex;flex-direction:column;gap:10px;padding-bottom:0"></div> </div> <div class="card"> <div class="card-title">🕐 Recent Activity</div> <div id="dash-recent-activity"></div> </div> </div> <div style="display:grid;grid-template-columns:1fr 1fr 1fr;gap:14px;margin-bottom:14px"> <div class="card"> <div class="card-title">💉 EPI Coverage</div> <div id="dash-epi-summary"></div> </div> <div class="card"> <div class="card-title">🥗 Nutrition Status</div> <div id="dash-nutr-summary"></div> </div> <div class="card"> <div class="card-title">💧 Water Quality</div> <div id="dash-water-summary"></div> </div> </div> <div style="display:grid;grid-template-columns:1fr 1fr;gap:14px;margin-bottom:14px"> <div class="card"> <div class="card-title">👥 CHW Performance</div> <div id="dash-chw-summary"></div> </div> <div class="card"> <div class="card-title">📦 Stock Alerts</div> <div id="dash-stock-summary"></div> </div> </div> </div> <div id="page-inspections" class="page"> <div style="background:linear-gradient(135deg,#0a5448,#0d7a5f);border-radius:12px;padding:14px 20px;margin-bottom:16px;display:flex;align-items:center;justify-content:space-between;flex-wrap:wrap;gap:10px"> <div> <div style="color:rgba(255,255,255,.7);font-size:11px;text-transform:uppercase;letter-spacing:.08em">Mbabala Rural Health Centre</div> <div style="color:#fff;font-size:18px;font-weight:700;margin-top:2px">✅ Inspections</div> <div style="color:rgba(255,255,255,.8);font-size:12px;margin-top:3px">Premises inspections and compliance tracking</div> </div> <div style="display:flex;gap:8px;flex-wrap:wrap"> <button class="btn" onclick="openModal('m-inspection')" style="background:rgba(255,255,255,.2);color:#fff;border:1px solid rgba(255,255,255,.3);font-weight:600">+ New Inspection</button> </div> </div> <div class="toolbar" id="insp-toolbar"> <input type="text" placeholder="🔍 Search inspections..." oninput="filterTbl(this,'tbl-insp')"> <select onchange="filterCol(this,'tbl-insp',5)"><option value="">All statuses</option><option>Pass</option><option>Fail</option><option>Action needed</option><option>Pending</option></select> <button class="btn primary" onclick="openModal('m-inspection')">+ New</button> <button class="btn sm" style="background:var(--gray,#374151);color:#fff;border:none" onclick="printCurrentPage('Inspection Reports','tbl-insp')">🖨 Print</button> <span id="insp-report-controls" style="display:none;gap:8px;align-items:center"><input type="text" placeholder="🔍 Search reports..." oninput="filterTbl(this,'tbl-insp-reports')"><button class="btn primary" onclick="openInspReport()">+ New Report</button><button class="btn sm" style="background:var(--gray,#374151);color:#fff;border:none" onclick="printCurrentPage('Inspection Reports','tbl-insp-reports')">🖨 Print</button></span></div> <div class="tabs" style="display:flex !important;flex-direction:row !important;flex-wrap:nowrap !important"> <div class="tab active" onclick="switchTab(this,'t-insp-list');document.getElementById('insp-toolbar').style.display='flex';document.getElementById('insp-report-controls').style.display='none';document.getElementById('insp-report-controls').parentElement.querySelectorAll(':scope>:not(#insp-report-controls)').forEach(function(e){e.style.display=''})">All Inspections</div> <div class="tab" onclick="switchTab(this,'t-insp-check');document.getElementById('insp-toolbar').style.display='flex';document.getElementById('insp-report-controls').style.display='none';document.getElementById('insp-report-controls').parentElement.querySelectorAll(':scope>:not(#insp-report-controls)').forEach(function(e){e.style.display=''})">Checklist</div> <div class="tab" onclick="switchTab(this,'t-insp-report');renderInspReports();document.getElementById('insp-toolbar').style.display='flex';document.getElementById('insp-report-controls').style.display='flex';document.getElementById('insp-report-controls').parentElement.querySelectorAll(':scope>:not(#insp-report-controls)').forEach(function(e){e.style.display='none'})">📄 Inspection Report</div> </div> <div id="t-insp-list" class="tab-pane active"> <div class="card"><div style="display:flex;gap:10px;flex-wrap:wrap;margin-bottom:12px;align-items:center">
@@ -867,7 +869,91 @@ body.dark-mode .dt td span[style*="color:var(--txt2)"] { color: #9ca3af !importa
  <div class="card"><div class="tbl-wrap"><table class="dt" id="tbl-insp-reports"><thead><tr><th>Date</th><th>Premises</th><th>Owner</th><th>Area</th><th>Inspector</th><th>Actions</th></tr></thead><tbody id="tb-insp-reports"></tbody></table></div></div>
 </div>
 </div> <div id="page-incidents" class="page"> <div style="background:linear-gradient(135deg,#b45309,#d97706);border-radius:12px;padding:14px 20px;margin-bottom:16px;display:flex;align-items:center;justify-content:space-between;flex-wrap:wrap;gap:10px"> <div> <div style="color:rgba(255,255,255,.7);font-size:11px;text-transform:uppercase;letter-spacing:.08em">Mbabala Rural Health Centre</div> <div style="color:#fff;font-size:18px;font-weight:700;margin-top:2px">⚠️ Incidents & Hazards</div> <div style="color:rgba(255,255,255,.8);font-size:12px;margin-top:3px">Log and track environmental health incidents</div> </div> <div style="display:flex;gap:8px;flex-wrap:wrap"> <button class="btn" onclick="openModal('m-incident')" style="background:rgba(255,255,255,.2);color:#fff;border:1px solid rgba(255,255,255,.3);font-weight:600">+ Log Incident</button> </div> </div> <div class="alert danger" id="inc-alert" style="display:none"><span class="alert-icon">🔴</span><span id="inc-alert-text"></span></div> <div class="toolbar"> <input type="text" placeholder="🔍 Search incidents..." oninput="filterTbl(this,'tbl-inc')"> <select onchange="filterCol(this,'tbl-inc',5)"><option value="">All statuses</option><option>Open</option><option>In progress</option><option>Resolved</option></select> <button class="btn primary" onclick="openModal('m-incident')">+ Log Incident</button> <button class="btn sm" style="background:var(--gray,#374151);color:#fff;border:none" onclick="printCurrentPage('Incident Reports','tbl-inc')">🖨 Print</button> </div> <div class="card"><div class="tbl-wrap"><table class="dt" id="tbl-inc"><thead><tr><th>#</th><th>Description</th><th>Location</th><th>Date</th><th>Priority</th><th>Status</th><th>Actions</th></tr></thead><tbody id="tb-inc"></tbody></table></div></div>
-</div> <div id="page-immunization" class="page"> <div style="background:linear-gradient(135deg,#0891b2,#0e7490);border-radius:12px;padding:14px 20px;margin-bottom:16px;display:flex;align-items:center;justify-content:space-between;flex-wrap:wrap;gap:10px"> <div> <div style="color:rgba(255,255,255,.7);font-size:11px;text-transform:uppercase;letter-spacing:.08em">Mbabala Rural Health Centre</div> <div style="color:#fff;font-size:18px;font-weight:700;margin-top:2px">💉 EPI / Immunization</div> <div style="color:rgba(255,255,255,.8);font-size:12px;margin-top:3px">Monthly immunization session reports</div> </div> <div style="display:flex;gap:8px;flex-wrap:wrap"> <button class="btn" onclick="openModal('m-immunization')" style="background:rgba(255,255,255,.2);color:#fff;border:1px solid rgba(255,255,255,.3);font-weight:600">+ New EPI Report</button> </div> </div> <div id="epi-stats"></div> <div class="toolbar"> <input type="text" placeholder="🔍 Search by period, vaccine..." oninput="filterEPICards(this.value)"> <button class="btn primary" onclick="openModal('m-immunization')">+ New EPI Report</button> <button class="btn sm" style="background:var(--gray,#374151);color:#fff;border:none" onclick="printSection('EPI Reports', document.getElementById('epi-cards-container').innerHTML)">🖨 Print</button> </div> <div class="tabs" style="display:flex !important;flex-direction:row !important;flex-wrap:nowrap !important"> <div class="tab active" onclick="switchTab(this,'t-epi-reports')">📋 Monthly Reports</div> <div class="tab" onclick="switchTab(this,'t-epi-analytics');renderEPIAnalytics()">📊 Analytics</div> </div> <div id="t-epi-reports" class="tab-pane active" style="padding-top:14px"> <div class="card"> <div class="card-title">EPI Monthly Reports <button class="btn sm" onclick="epiSummaryPDF()">📄 PDF</button></div> <div id="epi-cards-container"></div> </div> </div> <div id="t-epi-analytics" class="tab-pane"> <div id="epi-analytics-content"> <div style="text-align:center;padding:32px;color:var(--txt2)">Loading analytics...</div> </div> </div> </div> <div id="page-hia" class="page"> <div style="background:linear-gradient(135deg,#7c3aed,#6d28d9);border-radius:12px;padding:14px 20px;margin-bottom:16px;display:flex;align-items:center;justify-content:space-between;flex-wrap:wrap;gap:10px"> <div> <div style="color:rgba(255,255,255,.7);font-size:11px;text-transform:uppercase;letter-spacing:.08em">Mbabala Rural Health Centre</div> <div style="color:#fff;font-size:18px;font-weight:700;margin-top:2px">📋 HIA Reports</div> <div style="color:rgba(255,255,255,.8);font-size:12px;margin-top:3px">Health Information Aggregation reports (HIA 1 & 2)</div> </div> <div style="display:flex;gap:8px;flex-wrap:wrap"> <button class="btn" onclick="openModal('m-hia1')" style="background:rgba(255,255,255,.2);color:#fff;border:1px solid rgba(255,255,255,.3);font-weight:600">+ New HIA Report</button> </div> </div> <div class="tabs" style="display:flex !important;flex-direction:row !important;flex-wrap:nowrap !important"> <div class="tab active" onclick="switchHIATab(this,'t-hia1','hia1')" style="white-space:nowrap;flex-shrink:0">HIA 1 Monthly</div> <div class="tab" onclick="switchHIATab(this,'t-hia2','hia2')" style="white-space:nowrap;flex-shrink:0">HIA 2 Monthly</div> </div> <div class="toolbar" style="margin-top:16px"> <input type="text" id="hia-search" placeholder="🔍 Search HIA reports..." oninput="filterHIA(this.value)" style="flex:1;max-width:260px"> <button class="btn primary" id="hia-new-btn" onclick="openModal('m-hia1')">+ New HIA 1</button> <button class="btn sm" style="background:var(--teal);color:#fff;border:none" onclick="openDiseaseTrend()">📈 Disease Trend</button> <button class="btn sm" style="background:var(--gray,#374151);color:#fff;border:none" id="hia-print-btn" onclick="printCurrentPage('HIA 1 Reports','tbl-hia1')">🖨 Print</button> </div> <div id="t-hia1" class="tab-pane active"> <div class="card"><div class="tbl-wrap"><table class="dt" id="tbl-hia1"><thead><tr><th>Period</th><th>OPD</th><th>Admissions</th><th>Deaths</th><th>Submitted</th><th>Status</th><th>Actions</th></tr></thead><tbody id="tb-hia1"></tbody></table></div></div> </div> <div id="t-hia2" class="tab-pane"> <div class="card"><div class="tbl-wrap"><table class="dt" id="tbl-hia2"><thead><tr><th>Reporting Month</th><th>Prepared By</th><th>Attachments</th><th>Actions</th></tr></thead><tbody id="tb-hia2"></tbody></table></div></div> </div>
+</div> <div id="page-immunization" class="page"> <div style="background:linear-gradient(135deg,#0891b2,#0e7490);border-radius:12px;padding:14px 20px;margin-bottom:16px;display:flex;align-items:center;justify-content:space-between;flex-wrap:wrap;gap:10px"> <div> <div style="color:rgba(255,255,255,.7);font-size:11px;text-transform:uppercase;letter-spacing:.08em">Mbabala Rural Health Centre</div> <div style="color:#fff;font-size:18px;font-weight:700;margin-top:2px">💉 EPI / Immunization</div> <div style="color:rgba(255,255,255,.8);font-size:12px;margin-top:3px">Monthly immunization session reports</div> </div> <div style="display:flex;gap:8px;flex-wrap:wrap"> <button class="btn" onclick="openModal('m-immunization')" style="background:rgba(255,255,255,.2);color:#fff;border:1px solid rgba(255,255,255,.3);font-weight:600">+ New EPI Report</button> </div> </div> <div id="epi-stats"></div> <div class="toolbar"> <input type="text" placeholder="🔍 Search by period, vaccine..." oninput="filterEPICards(this.value)"> <button class="btn primary" onclick="openModal('m-immunization')">+ New EPI Report</button> <button class="btn sm" style="background:var(--gray,#374151);color:#fff;border:none" onclick="printSection('EPI Reports', document.getElementById('epi-cards-container').innerHTML)">🖨 Print</button> </div> <div class="tabs" style="display:flex !important;flex-direction:row !important;flex-wrap:nowrap !important"> <div class="tab active" onclick="switchTab(this,'t-epi-reports')">📋 Monthly Reports</div> <div class="tab" onclick="switchTab(this,'t-epi-analytics');renderEPIAnalytics()">📊 Analytics</div> </div> <div id="t-epi-reports" class="tab-pane active" style="padding-top:14px"> <div class="card"> <div class="card-title">EPI Monthly Reports <button class="btn sm" onclick="epiSummaryPDF()">📄 PDF</button></div> <div id="epi-cards-container"></div> </div> </div> <div id="t-epi-analytics" class="tab-pane"> <div id="epi-analytics-content"> <div style="text-align:center;padding:32px;color:var(--txt2)">Loading analytics...</div> </div> </div> </div> <div id="page-ipc-audit" class="page">
+<div style="background:linear-gradient(135deg,#0e7490,#0891b2);border-radius:12px;padding:14px 20px;margin-bottom:16px;display:flex;align-items:center;justify-content:space-between;flex-wrap:wrap;gap:10px">
+  <div>
+    <div style="color:rgba(255,255,255,.7);font-size:11px;text-transform:uppercase;letter-spacing:.08em">Mbabala Rural Health Centre</div>
+    <div style="color:#fff;font-size:18px;font-weight:700;margin-top:2px">📋 IPC Audit System</div>
+    <div style="color:rgba(255,255,255,.8);font-size:12px;margin-top:3px">Comprehensive departmental Infection Prevention &amp; Control audits</div>
+  </div>
+  <div style="display:flex;gap:8px;flex-wrap:wrap">
+    <button class="btn" onclick="openIPCAuditModal()" style="background:rgba(255,255,255,.2);border:1px solid rgba(255,255,255,.3);color:#fff;font-weight:600">+ New Audit</button>
+  </div>
+</div>
+
+<div class="g4" style="margin-bottom:16px" id="ipca-stats">
+  <div class="card-sm"><div class="stat-label">Facility IPC Score</div><div class="stat-val" id="ipca-facility-score">—</div></div>
+  <div class="card-sm"><div class="stat-label">Audits This Month</div><div class="stat-val" id="ipca-month-count">0</div></div>
+  <div class="card-sm"><div class="stat-label">IPC Champion</div><div class="stat-val" id="ipca-champion" style="font-size:15px">—</div></div>
+  <div class="card-sm"><div class="stat-label">Open Corrective Actions</div><div class="stat-val" id="ipca-open-capa">0</div></div>
+</div>
+
+<div class="tabs" style="display:flex !important;flex-direction:row !important;flex-wrap:wrap !important">
+  <div class="tab active" onclick="switchTab(this,'t-ipca-audits');renderIPCAuditList()">📝 Audits</div>
+  <div class="tab" onclick="switchTab(this,'t-ipca-leaderboard');renderIPCLeaderboard()">🏆 Leaderboard</div>
+  <div class="tab" onclick="switchTab(this,'t-ipca-trends');renderIPCTrends()">📈 Trends</div>
+  <div class="tab" onclick="switchTab(this,'t-ipca-capa');renderIPCCapaList()">✅ CAPA Tracker</div>
+  <div class="tab" onclick="switchTab(this,'t-ipca-setup');renderIPCSetup()">⚙️ Departments &amp; Checklist</div>
+</div>
+
+<div id="t-ipca-audits" class="tab-pane active" style="padding-top:14px">
+  <div class="toolbar" style="margin-bottom:10px">
+    <input type="text" id="ipca-search" placeholder="🔍 Search audits..." oninput="renderIPCAuditList()" style="flex:1;min-width:160px;padding:8px 12px;border:1px solid var(--bd);border-radius:8px;font-size:13px;background:var(--bg);color:var(--txt)">
+    <select id="ipca-filter-dept" onchange="renderIPCAuditList()" style="padding:8px 12px;border:1px solid var(--bd);border-radius:8px;font-size:13px;background:var(--bg);color:var(--txt)"><option value="">All Departments</option></select>
+    <select id="ipca-filter-freq" onchange="renderIPCAuditList()" style="padding:8px 12px;border:1px solid var(--bd);border-radius:8px;font-size:13px;background:var(--bg);color:var(--txt)"><option value="">All Frequencies</option><option>Weekly</option><option>Monthly</option></select>
+    <input type="text" id="ipca-filter-auditor" placeholder="Auditor" oninput="renderIPCAuditList()" style="width:120px;padding:8px 12px;border:1px solid var(--bd);border-radius:8px;font-size:13px;background:var(--bg);color:var(--txt)">
+    <button class="btn" onclick="printIPCAuditList()">🖨 Print</button>
+  </div>
+  <div class="tbl-wrap"><table class="dt" id="tbl-ipca-audits">
+    <thead><tr><th>Date</th><th>Department</th><th>Frequency</th><th>Auditor</th><th style="text-align:center">Score</th><th style="text-align:center">Rating</th><th>Actions</th></tr></thead>
+    <tbody id="tb-ipca-audits"></tbody>
+  </table></div>
+</div>
+
+<div id="t-ipca-leaderboard" class="tab-pane" style="padding-top:14px">
+  <div style="display:flex;gap:10px;align-items:center;margin-bottom:12px;flex-wrap:wrap">
+    <label style="font-size:12px;color:var(--txt2)">Period:</label>
+    <select id="ipca-lb-period" onchange="renderIPCLeaderboard()" style="padding:6px 10px;border:1px solid var(--bd);border-radius:8px;font-size:13px;background:var(--bg);color:var(--txt)"><option value="month">This Month</option><option value="quarter">This Quarter</option><option value="year">This Year</option><option value="all">All Time</option></select>
+    <button class="btn sm" onclick="printIPCLeaderboard()">🖨 Print</button>
+  </div>
+  <div id="ipca-leaderboard-body"></div>
+</div>
+
+<div id="t-ipca-trends" class="tab-pane" style="padding-top:14px">
+  <div class="g2" style="margin-bottom:14px">
+    <div class="card"><div class="card-title">📊 Departmental Performance (Latest Audits)</div><div id="ipca-chart-dept" style="height:280px"></div></div>
+    <div class="card"><div class="card-title">🧩 Compliance by Category (Facility Avg)</div><div id="ipca-chart-category" style="height:280px"></div></div>
+  </div>
+  <div class="card"><div class="card-title">📈 Facility IPC Score — Historical Trend</div><div id="ipca-chart-trend" style="height:280px"></div></div>
+</div>
+
+<div id="t-ipca-capa" class="tab-pane" style="padding-top:14px">
+  <div class="toolbar" style="margin-bottom:10px">
+    <select id="ipca-capa-filter-status" onchange="renderIPCCapaList()" style="padding:8px 12px;border:1px solid var(--bd);border-radius:8px;font-size:13px;background:var(--bg);color:var(--txt)"><option value="">All Status</option><option>Open</option><option>In Progress</option><option>Completed</option><option>Overdue</option></select>
+    <button class="btn" onclick="printIPCCapaList()">🖨 Print</button>
+  </div>
+  <div class="tbl-wrap"><table class="dt" id="tbl-ipca-capa">
+    <thead><tr><th>Finding</th><th>Department</th><th>Assigned To</th><th>Due Date</th><th style="text-align:center">Status</th><th>Actions</th></tr></thead>
+    <tbody id="tb-ipca-capa"></tbody>
+  </table></div>
+</div>
+
+<div id="t-ipca-setup" class="tab-pane" style="padding-top:14px">
+  <div class="g2">
+    <div class="card">
+      <div class="card-title">🏥 Departments <button class="btn sm" onclick="openIPCDeptModal()">+ Add</button></div>
+      <div id="ipca-dept-list"></div>
+    </div>
+    <div class="card">
+      <div class="card-title">📋 Checklist Categories &amp; Items <button class="btn sm" onclick="openIPCCategoryModal()">+ Add Category</button></div>
+      <div id="ipca-checklist-list"></div>
+    </div>
+  </div>
+</div>
+<div class="tip-ribbon"><span class="tip-text">💡 Loading tip...</span></div>
+</div>
+
+<div id="page-hia" class="page"> <div style="background:linear-gradient(135deg,#7c3aed,#6d28d9);border-radius:12px;padding:14px 20px;margin-bottom:16px;display:flex;align-items:center;justify-content:space-between;flex-wrap:wrap;gap:10px"> <div> <div style="color:rgba(255,255,255,.7);font-size:11px;text-transform:uppercase;letter-spacing:.08em">Mbabala Rural Health Centre</div> <div style="color:#fff;font-size:18px;font-weight:700;margin-top:2px">📋 HIA Reports</div> <div style="color:rgba(255,255,255,.8);font-size:12px;margin-top:3px">Health Information Aggregation reports (HIA 1 & 2)</div> </div> <div style="display:flex;gap:8px;flex-wrap:wrap"> <button class="btn" onclick="openModal('m-hia1')" style="background:rgba(255,255,255,.2);color:#fff;border:1px solid rgba(255,255,255,.3);font-weight:600">+ New HIA Report</button> </div> </div> <div class="tabs" style="display:flex !important;flex-direction:row !important;flex-wrap:nowrap !important"> <div class="tab active" onclick="switchHIATab(this,'t-hia1','hia1')" style="white-space:nowrap;flex-shrink:0">HIA 1 Monthly</div> <div class="tab" onclick="switchHIATab(this,'t-hia2','hia2')" style="white-space:nowrap;flex-shrink:0">HIA 2 Monthly</div> </div> <div class="toolbar" style="margin-top:16px"> <input type="text" id="hia-search" placeholder="🔍 Search HIA reports..." oninput="filterHIA(this.value)" style="flex:1;max-width:260px"> <button class="btn primary" id="hia-new-btn" onclick="openModal('m-hia1')">+ New HIA 1</button> <button class="btn sm" style="background:var(--teal);color:#fff;border:none" onclick="openDiseaseTrend()">📈 Disease Trend</button> <button class="btn sm" style="background:var(--gray,#374151);color:#fff;border:none" id="hia-print-btn" onclick="printCurrentPage('HIA 1 Reports','tbl-hia1')">🖨 Print</button> </div> <div id="t-hia1" class="tab-pane active"> <div class="card"><div class="tbl-wrap"><table class="dt" id="tbl-hia1"><thead><tr><th>Period</th><th>OPD</th><th>Admissions</th><th>Deaths</th><th>Submitted</th><th>Status</th><th>Actions</th></tr></thead><tbody id="tb-hia1"></tbody></table></div></div> </div> <div id="t-hia2" class="tab-pane"> <div class="card"><div class="tbl-wrap"><table class="dt" id="tbl-hia2"><thead><tr><th>Reporting Month</th><th>Prepared By</th><th>Attachments</th><th>Actions</th></tr></thead><tbody id="tb-hia2"></tbody></table></div></div> </div>
 </div> <div id="page-water" class="page"> <div style="background:linear-gradient(135deg,#0369a1,#0284c7);border-radius:12px;padding:14px 20px;margin-bottom:16px;display:flex;align-items:center;justify-content:space-between;flex-wrap:wrap;gap:10px"> <div> <div style="color:rgba(255,255,255,.7);font-size:11px;text-transform:uppercase;letter-spacing:.08em">Mbabala Rural Health Centre</div> <div style="color:#fff;font-size:18px;font-weight:700;margin-top:2px">💧 Water Quality</div> <div style="color:rgba(255,255,255,.8);font-size:12px;margin-top:3px">Water source testing and quality monitoring</div> </div> <div style="display:flex;gap:8px;flex-wrap:wrap"> <button class="btn" onclick="openModal('m-water')" style="background:rgba(255,255,255,.2);color:#fff;border:1px solid rgba(255,255,255,.3);font-weight:600">+ New Test</button> </div> </div> <div id="water-stats"></div> <div class="toolbar"> <input type="text" placeholder="🔍 Search water tests..." oninput="filterTbl(this,'tbl-water')"> <button class="btn primary" onclick="openModal('m-water')">+ Log Test</button> <button class="btn sm" style="background:var(--gray,#374151);color:#fff;border:none" onclick="printCurrentPage('Water Quality Tests','tbl-water')">🖨 Print</button> </div> <div class="card"><div class="card-title">Water Quality Log <button class="btn sm" onclick="waterPDF()">📄 PDF</button></div> <div class="tbl-wrap"><table class="dt" id="tbl-water"><thead><tr><th>Source</th><th>Location</th><th>Owner</th><th>Date</th><th>pH</th><th>E.coli</th><th>Result</th><th>Actions</th></tr></thead><tbody id="tb-water"></tbody></table></div></div>
 </div> <div id="page-ebs" class="page"> <div style="background:linear-gradient(135deg,#b45309,#d97706);border-radius:12px;padding:14px 20px;margin-bottom:16px;display:flex;align-items:center;justify-content:space-between;flex-wrap:wrap;gap:10px"> <div> <div style="color:rgba(255,255,255,.7);font-size:11px;text-transform:uppercase;letter-spacing:.08em">Mbabala Rural Health Centre</div> <div style="color:#fff;font-size:18px;font-weight:700;margin-top:2px">🚨 EBS / EMS</div> <div style="color:rgba(255,255,255,.8);font-size:12px;margin-top:3px">Event-Based Surveillance and Event Management Surveillance</div> </div> <div style="display:flex;gap:8px;flex-wrap:wrap"> <button class="btn" onclick="openModal('m-ebs')" style="background:rgba(255,255,255,.2);color:#fff;border:1px solid rgba(255,255,255,.3);font-weight:600">+ New Report</button> </div> </div> <div class="toolbar"> <input type="text" placeholder="🔍 Search signals..." oninput="filterTbl(this,'tbl-ebs')"> <button class="btn primary" onclick="openModal('m-ebs')">+ New Signal</button> <button class="btn sm" style="background:var(--gray,#374151);color:#fff;border:none" onclick="printCurrentPage('EBS/EMS Reports','tbl-ebs')">🖨 Print</button> </div> <div class="card"><div class="tbl-wrap"><table class="dt" id="tbl-ebs"><thead><tr><th>ID</th><th>Signal</th><th>Source</th><th>Date</th><th>Category</th><th>Verified</th><th>Actions</th></tr></thead><tbody id="tb-ebs"></tbody></table></div></div>
 </div> <div id="page-ipc" class="page"> <div style="background:linear-gradient(135deg,#0f766e,#0d9488);border-radius:12px;padding:14px 20px;margin-bottom:16px;display:flex;align-items:center;justify-content:space-between;flex-wrap:wrap;gap:10px"> <div> <div style="color:rgba(255,255,255,.7);font-size:11px;text-transform:uppercase;letter-spacing:.08em">Mbabala Rural Health Centre</div> <div style="color:#fff;font-size:18px;font-weight:700;margin-top:2px">🧤 IPC Reports</div> <div style="color:rgba(255,255,255,.8);font-size:12px;margin-top:3px">Infection Prevention and Control assessments</div> </div> <div style="display:flex;gap:8px;flex-wrap:wrap"> <button class="btn" onclick="openModal('m-ipc')" style="background:rgba(255,255,255,.2);color:#fff;border:1px solid rgba(255,255,255,.3);font-weight:600">+ New IPC Report</button> </div> </div> <div id="ipc-stats"></div> <div class="toolbar"> <input type="text" placeholder="🔍 Search audits..." oninput="filterTbl(this,'tbl-ipc')"> <button class="btn primary" onclick="openModal('m-ipc')">+ New Audit</button> <button class="btn sm" style="background:var(--gray,#374151);color:#fff;border:none" onclick="printCurrentPage('IPC Audit Reports','tbl-ipc')">🖨 Print</button> </div> <div class="card"><div class="tbl-wrap"><table class="dt" id="tbl-ipc"><thead><tr><th>Area</th><th>Auditor</th><th>Date</th><th>HH%</th><th>PPE%</th><th>Waste%</th><th>Overall</th><th>Actions</th></tr></thead><tbody id="tb-ipc"></tbody></table></div></div>
@@ -2368,6 +2454,7 @@ const STORE_FIELDS_MAP = {
   scorecard:()=>scorecardFields,
   village_visits:()=>vvFields, work_planner:()=>plannerFields,
   targets:()=>targetFields, u5_milestones:()=>msFields,
+  ipc_audits:()=>ipcAuditFields, ipc_capa:()=>ipcCapaFields,
 };
 const STORE_TITLES = {inspections:'Inspection Report',incidents:'Incident Report',water:'Water Quality Test',hia1:'HIA 1 Report',hia2:'HIA 2 Report',ebs:'EBS Signal',ipc:'IPC Audit',ecd:'ECD Activity',nutrition:'Nutrition Screening',waste:'Waste Report',vector:'Vector Activity',sanitation:'Village Sanitation',epi:'EPI Report',surveillance:'Surveillance Report',health_promo:'Health Promotion',facilities:'Facility',households:'Household',premises:'Premises'};
 
@@ -2569,7 +2656,7 @@ function rowBtns(store,id,viewFn,editFn,delfn,attStore){
 // ============================================================
 // RENDER FUNCTIONS
 // ============================================================
-function renderPage(p){ const fn={dashboard:renderDashboard,scorecard:renderScorecard,committees:renderCommittees,mrr:renderMRR,inspections:renderInspections,incidents:renderIncidents,immunization:renderEPI,hia:renderHIA,water:renderWater,ebs:renderEBS,ipc:renderIPC,ecd:renderECD,'ecd-monthly':renderECDMonthly,nutrition:renderNutrition,waste:renderWaste,vector:renderVector,sanitation:renderSanitation,surveillance:renderSurveillance,health_promo:renderHP,complaints:renderComplaints,facilities:renderFacilities,households:renderHouseholds,premises:renderPremises,documents:renderDocuments,analytics:renderAnalytics,admin:renderAdmin,mycin:renderMycin,legal:renderLegal,routine:renderRoutine,outbreak:renderOutbreak,'monthly-report':renderMonthlyReport,catchment:renderCatchment,planner:renderPlanner,'work-schedule':renderWorkSchedule,targets:renderTargets,followup:renderFollowup,stock:renderStock,'village-visits':renderVillageVisits,'insp-followup':renderInspFollowup,'disease-register':renderDiseaseRegister,villages:renderVillages,defaulters:renderDefaulters,foodhandlers:renderFoodHandlers,waterpoints:renderWaterPoints,schools:renderSchools,chw:renderCHW,meetings:renderMeetings,cbv:renderCBV_page,under5:renderUnder5}[p]; if(fn) fn(); }
+function renderPage(p){ const fn={dashboard:renderDashboard,scorecard:renderScorecard,committees:renderCommittees,'ipc-audit':renderIPCAudit,mrr:renderMRR,inspections:renderInspections,incidents:renderIncidents,immunization:renderEPI,hia:renderHIA,water:renderWater,ebs:renderEBS,ipc:renderIPC,ecd:renderECD,'ecd-monthly':renderECDMonthly,nutrition:renderNutrition,waste:renderWaste,vector:renderVector,sanitation:renderSanitation,surveillance:renderSurveillance,health_promo:renderHP,complaints:renderComplaints,facilities:renderFacilities,households:renderHouseholds,premises:renderPremises,documents:renderDocuments,analytics:renderAnalytics,admin:renderAdmin,mycin:renderMycin,legal:renderLegal,routine:renderRoutine,outbreak:renderOutbreak,'monthly-report':renderMonthlyReport,catchment:renderCatchment,planner:renderPlanner,'work-schedule':renderWorkSchedule,targets:renderTargets,followup:renderFollowup,stock:renderStock,'village-visits':renderVillageVisits,'insp-followup':renderInspFollowup,'disease-register':renderDiseaseRegister,villages:renderVillages,defaulters:renderDefaulters,foodhandlers:renderFoodHandlers,waterpoints:renderWaterPoints,schools:renderSchools,chw:renderCHW,meetings:renderMeetings,cbv:renderCBV_page,under5:renderUnder5}[p]; if(fn) fn(); }
 
 function renderDashboard(){
   const now = new Date();
@@ -7095,6 +7182,7 @@ function updateOfflineBadge(){
 // Run backup check after login
 function afterLoginTasks(){
   setTimeout(checkBackupReminder, 5000); // check 5 seconds after login
+  setTimeout(checkIPCOverdueNotifications, 7000); // check IPC corrective actions overdue
 }
 
 // ══════════════════════════════════════════════════════════
@@ -12982,6 +13070,800 @@ function printScorecardTable(){
   });
   printSection('Community Scorecard', clone.outerHTML);
 }
+
+
+const ipcAuditFields = [
+  {id:'f-ipca-dept', key:'department', label:'Department'},
+  {id:'f-ipca-freq', key:'frequency', label:'Frequency'},
+  {id:'f-ipca-date', key:'date', label:'Audit Date'},
+  {id:'f-ipca-auditor', key:'auditor', label:'Auditor'},
+  {id:'', key:'totalScore', label:'Total Score'},
+  {id:'', key:'maxPossible', label:'Max Possible'},
+  {id:'', key:'percentage', label:'Percentage'},
+  {id:'', key:'rating', label:'Rating'},
+  {id:'f-ipca-findings', key:'findings', label:'Findings'},
+  {id:'f-ipca-recommendations', key:'recommendations', label:'Recommendations'},
+];
+const ipcCapaFields = [
+  {id:'f-capa-finding', key:'finding', label:'Finding'},
+  {id:'f-capa-dept', key:'department', label:'Department'},
+  {id:'f-capa-assigned', key:'assignedTo', label:'Assigned To'},
+  {id:'f-capa-due', key:'dueDate', label:'Due Date'},
+  {id:'f-capa-status', key:'status', label:'Status'},
+  {id:'f-capa-notes', key:'notes', label:'Notes'},
+];
+
+// ══════════════════════════════════════════════════════════════════════════
+// IPC AUDIT SYSTEM — comprehensive departmental IPC audits, leaderboard,
+// trends, and corrective action (CAPA) tracking. Fully separate from the
+// existing simple "IPC Reports" module — nothing here touches that data.
+// ══════════════════════════════════════════════════════════════════════════
+
+const IPCA_RATING_BANDS = [
+  {min:90, label:'Excellent', color:'#16a34a'},
+  {min:75, label:'Good', color:'#0891b2'},
+  {min:60, label:'Fair', color:'#d97706'},
+  {min:0,  label:'Needs Improvement', color:'#dc2626'},
+];
+
+function ipcaRatingFor(pct){
+  for(const band of IPCA_RATING_BANDS){ if(pct >= band.min) return band; }
+  return IPCA_RATING_BANDS[IPCA_RATING_BANDS.length-1];
+}
+
+function ipcaSeedDefaults(){
+  // Seed default departments and checklist categories/items ONLY if nothing exists yet,
+  // so this never overwrites anything you've already customised.
+  if(!DB.get('ipc_departments').length){
+    const depts = ['OPD','MCH','ART','Laboratory','Pharmacy','Environmental Health','TB Corner','Inpatient/Wards'];
+    const data = depts.map(name => ({id: genId('IPD'), name, status:'Active'}));
+    DB.set('ipc_departments', data);
+    sbSet('ipc_departments', data);
+  }
+  if(!DB.get('ipc_checklist_categories').length){
+    const cats = ['Hand Hygiene','PPE Compliance','Waste Segregation','Environmental Cleaning','Sharps Management','Decontamination & Sterilization','IPC Supplies/Corner','Documentation','Staff Compliance'];
+    const catData = cats.map((name,i) => ({id: genId('IPCAT'), name, order:i}));
+    DB.set('ipc_checklist_categories', catData);
+    sbSet('ipc_checklist_categories', catData);
+
+    // A few sensible starter items per category — fully editable/removable afterwards.
+    const starterItems = {
+      'Hand Hygiene': ['Hand sanitizer available at point of care','Handwashing facilities functional with soap and water','Staff observed practicing correct hand hygiene technique'],
+      'PPE Compliance': ['Adequate PPE stock available (gloves, masks, gowns)','Staff wearing appropriate PPE for the task','PPE disposed of correctly after use'],
+      'Waste Segregation': ['Colour-coded waste bins available and correctly used','Sharps container not overfilled (below 3/4 full)','General waste separated from infectious waste'],
+      'Environmental Cleaning': ['Surfaces visibly clean and free of dust/debris','Cleaning schedule visible and up to date','Cleaning equipment stored appropriately'],
+      'Sharps Management': ['Sharps container available at point of use','No exposed/uncapped sharps observed','Sharps injury log available and up to date'],
+      'Decontamination & Sterilization': ['Instruments processed according to protocol','Sterilization equipment functioning and validated','Clean and dirty processing areas separated'],
+      'IPC Supplies/Corner': ['IPC corner/station stocked and organised','IPC guidelines/posters visibly displayed'],
+      'Documentation': ['IPC audit records/checklists available on file','Incident/near-miss reporting forms accessible'],
+      'Staff Compliance': ['Staff aware of IPC protocols for the department','Staff able to demonstrate correct isolation/precaution procedures'],
+    };
+    const allItems = [];
+    catData.forEach(cat => {
+      (starterItems[cat.name]||[]).forEach((text,i) => {
+        allItems.push({id: genId('IPCI'), categoryId: cat.id, text, maxScore: 5, order: i});
+      });
+    });
+    DB.set('ipc_checklist_items', allItems);
+    sbSet('ipc_checklist_items', allItems);
+  }
+}
+
+function renderIPCAudit(){
+  ipcaSeedDefaults();
+  populateIPCDeptSelects();
+  renderIPCAuditList();
+  updateIPCAStats();
+}
+
+function populateIPCDeptSelects(){
+  const depts = DB.get('ipc_departments').filter(d => d.status !== 'Inactive');
+  const opts = depts.map(d => `<option value="${d.name}">${d.name}</option>`).join('');
+  const filterSel = document.getElementById('ipca-filter-dept');
+  if(filterSel){ const cur = filterSel.value; filterSel.innerHTML = '<option value="">All Departments</option>' + opts; filterSel.value = cur; }
+  const formSel = document.getElementById('f-ipca-dept');
+  if(formSel){ formSel.innerHTML = opts; }
+}
+
+// ── STATS (top of page) ──────────────────────────────────────────────────
+function updateIPCAStats(){
+  const audits = DB.get('ipc_audits');
+  const now = new Date();
+  const curMonth = now.getFullYear()+'-'+String(now.getMonth()+1).padStart(2,'0');
+  const thisMonthAudits = audits.filter(a => (a.date||'').startsWith(curMonth));
+
+  // Facility score = average of the LATEST audit per department (not every historical audit)
+  const latestByDept = {};
+  [...audits].sort((a,b)=>(a.date||'').localeCompare(b.date||'')).forEach(a => { latestByDept[a.department] = a; });
+  const latestScores = Object.values(latestByDept).map(a => a.percentage||0);
+  const facilityScore = latestScores.length ? Math.round(latestScores.reduce((s,v)=>s+v,0)/latestScores.length) : null;
+
+  const elScore = document.getElementById('ipca-facility-score');
+  if(elScore) elScore.textContent = facilityScore===null ? '—' : facilityScore+'%';
+  const elMonth = document.getElementById('ipca-month-count');
+  if(elMonth) elMonth.textContent = thisMonthAudits.length;
+
+  // IPC Champion = highest-scoring department from the most recent audit period (this month if any, else latest overall)
+  let champion = '—';
+  const pool = thisMonthAudits.length ? thisMonthAudits : audits;
+  if(pool.length){
+    const best = [...pool].sort((a,b)=>(b.percentage||0)-(a.percentage||0))[0];
+    champion = best.department + ' (' + Math.round(best.percentage||0) + '%)';
+  }
+  const elChamp = document.getElementById('ipca-champion');
+  if(elChamp) elChamp.textContent = champion;
+
+  const openCapa = DB.get('ipc_capa').filter(c => c.status !== 'Completed').length;
+  const elCapa = document.getElementById('ipca-open-capa');
+  if(elCapa) elCapa.textContent = openCapa;
+}
+
+// ── AUDIT LIST ────────────────────────────────────────────────────────────
+function renderIPCAuditList(){
+  const tb = document.getElementById('tb-ipca-audits');
+  if(!tb) return;
+  const search = (document.getElementById('ipca-search')||{value:''}).value.toLowerCase();
+  const deptFilter = (document.getElementById('ipca-filter-dept')||{value:''}).value;
+  const freqFilter = (document.getElementById('ipca-filter-freq')||{value:''}).value;
+  const auditorFilter = (document.getElementById('ipca-filter-auditor')||{value:''}).value.toLowerCase();
+
+  let data = DB.get('ipc_audits');
+  if(deptFilter) data = data.filter(a => a.department === deptFilter);
+  if(freqFilter) data = data.filter(a => a.frequency === freqFilter);
+  if(auditorFilter) data = data.filter(a => (a.auditor||'').toLowerCase().includes(auditorFilter));
+  if(search) data = data.filter(a => JSON.stringify(a).toLowerCase().includes(search));
+
+  data = [...data].sort((a,b)=>(b.date||'').localeCompare(a.date||''));
+
+  if(!data.length){
+    tb.innerHTML = '<tr><td colspan="7" style="text-align:center;padding:32px;color:var(--txt2)">No IPC audits yet. Click + New Audit to conduct your first departmental audit.</td></tr>';
+    return;
+  }
+  tb.innerHTML = data.map(a => {
+    const rating = ipcaRatingFor(a.percentage||0);
+    return `<tr>
+      <td>${fmtDate ? fmtDate(a.date) : (a.date||'')}</td>
+      <td><b>${a.department}</b></td>
+      <td>${a.frequency||''}</td>
+      <td>${a.auditor||''}</td>
+      <td style="text-align:center;font-weight:700">${a.totalScore||0}/${a.maxPossible||0} (${Math.round(a.percentage||0)}%)</td>
+      <td style="text-align:center"><span style="background:${rating.color}22;color:${rating.color};padding:3px 10px;border-radius:12px;font-size:11px;font-weight:700">${rating.label}</span></td>
+      <td>${rowBtns('ipc_audits',a.id,"viewIPCAudit('"+a.id+"')","editIPCAudit('"+a.id+"')","deleteRecord('ipc_audits','"+a.id+"',renderIPCAuditList)")}</td>
+    </tr>`;
+  }).join('');
+}
+
+// ── AUDIT MODAL: open / build checklist / save ───────────────────────────
+function openIPCAuditModal(){
+  document.getElementById('f-ipca-id').value = '';
+  document.getElementById('f-ipca-date').value = today ? today() : new Date().toISOString().slice(0,10);
+  document.getElementById('f-ipca-auditor').value = '';
+  document.getElementById('f-ipca-findings').value = '';
+  document.getElementById('f-ipca-recommendations').value = '';
+  document.getElementById('t-ipc-audit').textContent = 'New IPC Audit';
+  populateIPCDeptSelects();
+  buildIPCChecklistForm({});
+  openModal('m-ipc-audit');
+}
+
+function buildIPCChecklistForm(existingScores){
+  existingScores = existingScores || {};
+  const cats = [...DB.get('ipc_checklist_categories')].sort((a,b)=>(a.order||0)-(b.order||0));
+  const items = DB.get('ipc_checklist_items');
+  const body = document.getElementById('ipca-checklist-body');
+  if(!body) return;
+
+  if(!cats.length){
+    body.innerHTML = '<div style="padding:16px;color:var(--txt2);font-size:12px;text-align:center">No checklist categories set up yet. Go to the Departments &amp; Checklist tab to add some.</div>';
+    return;
+  }
+
+  body.innerHTML = cats.map(cat => {
+    const catItems = items.filter(it => it.categoryId === cat.id).sort((a,b)=>(a.order||0)-(b.order||0));
+    if(!catItems.length) return '';
+    const rows = catItems.map(it => {
+      const ex = existingScores[it.id] || {};
+      return `<tr data-max="${it.maxScore}">
+        <td style="padding:6px 8px;font-size:12px">${it.text}</td>
+        <td style="padding:6px 8px;text-align:center;font-size:11px;color:var(--txt2)">/ ${it.maxScore}</td>
+        <td style="padding:6px 8px;text-align:center"><input type="number" class="ipca-score-input" data-item-id="${it.id}" min="0" max="${it.maxScore}" value="${ex.score!==undefined?ex.score:''}" placeholder="0" style="width:60px;text-align:center;padding:4px;border:1px solid var(--bd);border-radius:6px;font-size:13px;background:var(--bg);color:var(--txt)" oninput="updateIPCALiveTotal()"></td>
+        <td style="padding:6px 8px"><input type="text" class="ipca-remarks-input" data-item-id="${it.id}" value="${(ex.remarks||'').replace(/"/g,'&quot;')}" placeholder="Remarks..." style="width:100%;padding:4px;border:1px solid var(--bd);border-radius:6px;font-size:12px;background:var(--bg);color:var(--txt)"></td>
+      </tr>`;
+    }).join('');
+    return `<div style="margin-bottom:12px">
+      <div style="background:var(--teal-d);color:#fff;padding:6px 10px;font-size:12px;font-weight:700;border-radius:6px 6px 0 0">${cat.name}</div>
+      <table style="width:100%;border-collapse:collapse;border:1px solid var(--bd);border-top:none">
+        <thead><tr style="background:var(--bg2)"><th style="padding:6px 8px;text-align:left;font-size:11px">Item</th><th style="padding:6px 8px;font-size:11px">Max</th><th style="padding:6px 8px;font-size:11px">Score</th><th style="padding:6px 8px;text-align:left;font-size:11px">Remarks</th></tr></thead>
+        <tbody>${rows}</tbody>
+      </table>
+    </div>`;
+  }).join('');
+
+  updateIPCALiveTotal();
+}
+
+function updateIPCALiveTotal(){
+  const rows = document.querySelectorAll('#ipca-checklist-body tr[data-max]');
+  let total = 0, max = 0;
+  rows.forEach(row => {
+    const m = parseFloat(row.getAttribute('data-max')) || 0;
+    const input = row.querySelector('.ipca-score-input');
+    const s = input ? (parseFloat(input.value) || 0) : 0;
+    max += m; total += Math.min(s, m);
+  });
+  const pct = max ? Math.round((total/max)*100) : 0;
+  const el = document.getElementById('ipca-live-total');
+  if(el) el.textContent = total+' / '+max+' ('+pct+'%)';
+}
+
+function saveIPCAudit(){
+  const id = v('f-ipca-id');
+  const dept = v('f-ipca-dept');
+  const freq = v('f-ipca-freq');
+  const date = v('f-ipca-date');
+  const auditor = v('f-ipca-auditor');
+  if(!dept || !date || !auditor){ toast('Please fill in Department, Date and Auditor','error'); return; }
+
+  const itemScores = [];
+  let total = 0, max = 0;
+  document.querySelectorAll('#ipca-checklist-body tr[data-max]').forEach(row => {
+    const itemId = row.querySelector('.ipca-score-input').dataset.itemId;
+    const m = parseFloat(row.getAttribute('data-max')) || 0;
+    const score = Math.min(parseFloat(row.querySelector('.ipca-score-input').value) || 0, m);
+    const remarks = row.querySelector('.ipca-remarks-input').value || '';
+    itemScores.push({itemId, score, remarks});
+    total += score; max += m;
+  });
+  const percentage = max ? (total/max)*100 : 0;
+  const rating = ipcaRatingFor(percentage).label;
+
+  const rec = {
+    id: id || genId('IPCA'),
+    department: dept, frequency: freq, date, auditor,
+    itemScores, totalScore: total, maxPossible: max, percentage, rating,
+    findings: v('f-ipca-findings'), recommendations: v('f-ipca-recommendations'),
+  };
+
+  const data = DB.get('ipc_audits');
+  const idx = data.findIndex(x => x.id === rec.id);
+  if(idx >= 0) data[idx] = rec; else data.unshift(rec);
+  DB.set('ipc_audits', data);
+  sbSet('ipc_audits', data);
+  if(typeof auditLog === 'function') auditLog(id?'UPDATE':'CREATE','ipc_audits',rec.id,dept+' — '+date);
+
+  closeModal('m-ipc-audit');
+  renderIPCAuditList();
+  updateIPCAStats();
+  toast('✅ IPC audit saved','success');
+}
+
+function editIPCAudit(id){
+  const rec = DB.get('ipc_audits').find(a => a.id === id);
+  if(!rec){ toast('Audit not found','error'); return; }
+  document.getElementById('t-ipc-audit').textContent = 'Edit IPC Audit';
+  populateIPCDeptSelects();
+  document.getElementById('f-ipca-id').value = rec.id;
+  sv('f-ipca-dept', rec.department);
+  sv('f-ipca-freq', rec.frequency);
+  document.getElementById('f-ipca-date').value = rec.date || '';
+  document.getElementById('f-ipca-auditor').value = rec.auditor || '';
+  document.getElementById('f-ipca-findings').value = rec.findings || '';
+  document.getElementById('f-ipca-recommendations').value = rec.recommendations || '';
+  const existingScores = {};
+  (rec.itemScores||[]).forEach(s => { existingScores[s.itemId] = s; });
+  buildIPCChecklistForm(existingScores);
+  openModal('m-ipc-audit');
+}
+
+function viewIPCAudit(id){
+  const rec = DB.get('ipc_audits').find(a => a.id === id);
+  if(!rec){ toast('Audit not found','error'); return; }
+  const s = DB.getObj('settings')||{};
+  const cats = DB.get('ipc_checklist_categories');
+  const items = DB.get('ipc_checklist_items');
+  const rating = ipcaRatingFor(rec.percentage||0);
+
+  let bodyHtml = `<div style="font-family:Arial,sans-serif">
+    <div style="text-align:center;margin-bottom:12px;border-bottom:3px solid #1a5c4f;padding-bottom:8px">
+      <div style="font-size:11px;color:#555">Republic of Zambia · Ministry of Health</div>
+      <div style="font-size:15px;font-weight:800;color:#1a5c4f">IPC AUDIT REPORT</div>
+    </div>
+    <table style="width:100%;border-collapse:collapse;margin-bottom:12px;font-size:11px"><tr>
+      <td style="padding:5px 8px;border:1px solid #ccc"><b>Facility:</b> ${s.name||'Mbabala RHC'}</td>
+      <td style="padding:5px 8px;border:1px solid #ccc"><b>Department:</b> ${rec.department}</td>
+      <td style="padding:5px 8px;border:1px solid #ccc"><b>Date:</b> ${rec.date||''}</td>
+      <td style="padding:5px 8px;border:1px solid #ccc"><b>Auditor:</b> ${rec.auditor||''}</td>
+    </tr></table>`;
+
+  cats.forEach(cat => {
+    const catItems = items.filter(it => it.categoryId === cat.id);
+    if(!catItems.length) return;
+    bodyHtml += `<div style="background:#1a5c4f;color:#fff;padding:5px 10px;font-size:11px;font-weight:700;margin-top:8px">${cat.name}</div>
+      <table style="width:100%;border-collapse:collapse;font-size:10.5px"><thead><tr style="background:#e8f5f0"><th style="padding:5px;text-align:left;border:1px solid #ccc">Item</th><th style="padding:5px;border:1px solid #ccc;width:60px">Score</th><th style="padding:5px;text-align:left;border:1px solid #ccc">Remarks</th></tr></thead><tbody>`;
+    catItems.forEach(it => {
+      const sc = (rec.itemScores||[]).find(x => x.itemId === it.id) || {};
+      bodyHtml += `<tr><td style="padding:5px;border:1px solid #ccc">${it.text}</td><td style="padding:5px;border:1px solid #ccc;text-align:center">${sc.score!==undefined?sc.score:'—'}/${it.maxScore}</td><td style="padding:5px;border:1px solid #ccc">${sc.remarks||''}</td></tr>`;
+    });
+    bodyHtml += `</tbody></table>`;
+  });
+
+  bodyHtml += `<div style="display:flex;gap:16px;margin:14px 0">
+    <div style="padding:8px 16px;background:#e8f5f0;border-radius:8px;border:1px solid #1a5c4f;font-size:12px"><b>Total Score: </b><span style="color:${rating.color};font-size:16px;font-weight:800">${rec.totalScore}/${rec.maxPossible} (${Math.round(rec.percentage||0)}%)</span></div>
+    <div style="padding:8px 16px;background:${rating.color}22;border-radius:8px;border:1px solid ${rating.color};font-size:12px"><b>Rating: </b><span style="color:${rating.color};font-weight:800">${rating.label}</span></div>
+  </div>`;
+
+  if(rec.findings) bodyHtml += `<div style="padding:8px 10px;border:1px solid #ccc;border-radius:6px;font-size:11px;margin-bottom:8px"><b>Findings:</b> ${rec.findings}</div>`;
+  if(rec.recommendations) bodyHtml += `<div style="padding:8px 10px;border:1px solid #ccc;border-radius:6px;font-size:11px;margin-bottom:8px"><b>Recommendations:</b> ${rec.recommendations}</div>`;
+  bodyHtml += `</div>`;
+
+  showViewModal('IPC Audit Report', rec.department+' — '+rec.date, bodyHtml, [
+    {label:'✅ Add Corrective Action', cls:'primary', fn:"closeModal('m-view');openIPCCapaFromAudit('"+rec.id+"')"},
+    {label:'🖨 Print', cls:'', fn:"printSection('IPC Audit Report - '+document.querySelector('#view-title').textContent, document.getElementById('view-body').innerHTML)"},
+  ]);
+}
+
+function printIPCAuditList(){
+  const tbl = document.getElementById('tbl-ipca-audits');
+  if(!tbl) return;
+  const clone = tbl.cloneNode(true);
+  clone.querySelectorAll('tr').forEach(row => { const cells = row.querySelectorAll('th,td'); if(cells.length) cells[cells.length-1].remove(); });
+  printSection('IPC Audit List', clone.outerHTML);
+}
+
+
+// ── LEADERBOARD ───────────────────────────────────────────────────────────
+function ipcaGetPeriodBounds(period){
+  const now = new Date();
+  if(period === 'month'){
+    return now.getFullYear()+'-'+String(now.getMonth()+1).padStart(2,'0');
+  }
+  if(period === 'quarter'){
+    const q = Math.floor(now.getMonth()/3);
+    return {startMonth: q*3, endMonth: q*3+2, year: now.getFullYear()};
+  }
+  if(period === 'year'){
+    return String(now.getFullYear());
+  }
+  return null; // all time
+}
+
+function renderIPCLeaderboard(){
+  const period = (document.getElementById('ipca-lb-period')||{value:'month'}).value;
+  const audits = DB.get('ipc_audits');
+  let filtered = audits;
+
+  if(period === 'month'){
+    const ym = ipcaGetPeriodBounds('month');
+    filtered = audits.filter(a => (a.date||'').startsWith(ym));
+  } else if(period === 'year'){
+    const y = ipcaGetPeriodBounds('year');
+    filtered = audits.filter(a => (a.date||'').startsWith(y));
+  } else if(period === 'quarter'){
+    const b = ipcaGetPeriodBounds('quarter');
+    filtered = audits.filter(a => {
+      if(!a.date) return false;
+      const d = new Date(a.date);
+      return d.getFullYear() === b.year && d.getMonth() >= b.startMonth && d.getMonth() <= b.endMonth;
+    });
+  }
+
+  // For the leaderboard, use each department's BEST (or latest) audit score within the period
+  const byDept = {};
+  [...filtered].sort((a,b)=>(a.date||'').localeCompare(b.date||'')).forEach(a => { byDept[a.department] = a; });
+  const ranked = Object.values(byDept).sort((a,b) => (b.percentage||0)-(a.percentage||0));
+
+  const el = document.getElementById('ipca-leaderboard-body');
+  if(!el) return;
+  if(!ranked.length){
+    el.innerHTML = '<div style="padding:32px;text-align:center;color:var(--txt2)">No audits recorded for this period yet.</div>';
+    return;
+  }
+
+  el.innerHTML = '<div class="tbl-wrap"><table class="dt"><thead><tr><th style="width:60px">Rank</th><th>Department</th><th style="text-align:center">Score</th><th style="text-align:center">Rating</th><th>Last Audited</th></tr></thead><tbody>'
+    + ranked.map((a,i) => {
+        const rating = ipcaRatingFor(a.percentage||0);
+        const medal = i===0?'🥇':i===1?'🥈':i===2?'🥉':(i+1);
+        return `<tr style="${i===0?'background:linear-gradient(90deg,#fef3c7,transparent)':''}">
+          <td style="font-size:16px;text-align:center">${medal}</td>
+          <td><b>${a.department}</b>${i===0?' <span style="background:#f59e0b;color:#fff;padding:2px 8px;border-radius:10px;font-size:10px;margin-left:6px">🏆 IPC CHAMPION</span>':''}</td>
+          <td style="text-align:center;font-weight:800;color:${rating.color}">${Math.round(a.percentage||0)}%</td>
+          <td style="text-align:center"><span style="background:${rating.color}22;color:${rating.color};padding:3px 10px;border-radius:12px;font-size:11px;font-weight:700">${rating.label}</span></td>
+          <td>${a.date||''}</td>
+        </tr>`;
+      }).join('')
+    + '</tbody></table></div>';
+}
+
+function printIPCLeaderboard(){
+  const el = document.getElementById('ipca-leaderboard-body');
+  if(!el) return;
+  printSection('IPC Leaderboard', el.innerHTML);
+}
+
+// ── TRENDS / CHARTS ───────────────────────────────────────────────────────
+let _ipcaChartDept = null, _ipcaChartCategory = null, _ipcaChartTrend = null;
+
+function renderIPCTrends(){
+  const audits = DB.get('ipc_audits');
+  if(typeof Chart === 'undefined') return;
+
+  // Departmental performance — latest audit per department
+  const byDept = {};
+  [...audits].sort((a,b)=>(a.date||'').localeCompare(b.date||'')).forEach(a => { byDept[a.department] = a; });
+  const deptLabels = Object.keys(byDept);
+  const deptScores = deptLabels.map(d => Math.round(byDept[d].percentage||0));
+
+  const ctxD = document.getElementById('ipca-chart-dept');
+  if(ctxD){
+    ctxD.innerHTML = '<canvas></canvas>';
+    const canvas = ctxD.querySelector('canvas');
+    if(_ipcaChartDept) _ipcaChartDept.destroy();
+    if(deptLabels.length){
+      _ipcaChartDept = new Chart(canvas, {
+        type: 'bar',
+        data: { labels: deptLabels, datasets: [{ label:'Latest Score (%)', data: deptScores, backgroundColor: deptScores.map(s=>ipcaRatingFor(s).color) }] },
+        options: { responsive:true, maintainAspectRatio:false, plugins:{legend:{display:false}}, scales:{y:{beginAtZero:true,max:100}} }
+      });
+    } else {
+      ctxD.innerHTML = '<div style="padding:32px;text-align:center;color:var(--txt2);font-size:12px">No audit data yet</div>';
+    }
+  }
+
+  // Compliance by category — facility-wide average % per category across all audits
+  const cats = DB.get('ipc_checklist_categories');
+  const items = DB.get('ipc_checklist_items');
+  const catAverages = cats.map(cat => {
+    const catItemIds = items.filter(it => it.categoryId === cat.id).map(it => it.id);
+    let total = 0, max = 0;
+    audits.forEach(a => {
+      (a.itemScores||[]).forEach(sc => {
+        if(catItemIds.includes(sc.itemId)){
+          const item = items.find(it => it.id === sc.itemId);
+          if(item){ total += sc.score||0; max += item.maxScore||0; }
+        }
+      });
+    });
+    return { name: cat.name, pct: max ? Math.round((total/max)*100) : 0 };
+  }).filter(c => c.pct > 0 || audits.length === 0);
+
+  const ctxC = document.getElementById('ipca-chart-category');
+  if(ctxC){
+    ctxC.innerHTML = '<canvas></canvas>';
+    const canvas = ctxC.querySelector('canvas');
+    if(_ipcaChartCategory) _ipcaChartCategory.destroy();
+    if(catAverages.length && audits.length){
+      _ipcaChartCategory = new Chart(canvas, {
+        type: 'bar',
+        data: { labels: catAverages.map(c=>c.name), datasets: [{ label:'Compliance (%)', data: catAverages.map(c=>c.pct), backgroundColor:'#0891b2' }] },
+        options: { responsive:true, maintainAspectRatio:false, indexAxis:'y', plugins:{legend:{display:false}}, scales:{x:{beginAtZero:true,max:100}} }
+      });
+    } else {
+      ctxC.innerHTML = '<div style="padding:32px;text-align:center;color:var(--txt2);font-size:12px">No audit data yet</div>';
+    }
+  }
+
+  // Facility historical trend — average % per audit date across all departments
+  const byDate = {};
+  audits.forEach(a => {
+    const d = a.date || '—';
+    if(!byDate[d]) byDate[d] = [];
+    byDate[d].push(a.percentage||0);
+  });
+  const sortedDates = Object.keys(byDate).sort();
+  const trendData = sortedDates.map(d => Math.round(byDate[d].reduce((s,v)=>s+v,0)/byDate[d].length));
+
+  const ctxT = document.getElementById('ipca-chart-trend');
+  if(ctxT){
+    ctxT.innerHTML = '<canvas></canvas>';
+    const canvas = ctxT.querySelector('canvas');
+    if(_ipcaChartTrend) _ipcaChartTrend.destroy();
+    if(sortedDates.length){
+      _ipcaChartTrend = new Chart(canvas, {
+        type: 'line',
+        data: { labels: sortedDates, datasets: [{ label:'Facility Avg (%)', data: trendData, borderColor:'#1a5c4f', backgroundColor:'rgba(26,92,79,.1)', fill:true, tension:0.3 }] },
+        options: { responsive:true, maintainAspectRatio:false, scales:{y:{beginAtZero:true,max:100}} }
+      });
+    } else {
+      ctxT.innerHTML = '<div style="padding:32px;text-align:center;color:var(--txt2);font-size:12px">No audit history yet</div>';
+    }
+  }
+}
+
+// ── CAPA TRACKER ──────────────────────────────────────────────────────────
+function openIPCCapaFromAudit(auditId){
+  const audit = DB.get('ipc_audits').find(a => a.id === auditId);
+  if(!audit){ toast('Audit not found','error'); return; }
+  document.getElementById('f-capa-id').value = '';
+  document.getElementById('f-capa-audit-id').value = auditId;
+  document.getElementById('f-capa-finding').value = audit.findings || '';
+  document.getElementById('f-capa-dept').value = audit.department;
+  document.getElementById('f-capa-assigned').value = '';
+  document.getElementById('f-capa-due').value = '';
+  sv('f-capa-status','Open');
+  document.getElementById('f-capa-notes').value = '';
+  document.getElementById('t-ipc-capa').textContent = 'New Corrective Action';
+  openModal('m-ipc-capa');
+}
+
+function openIPCCapaModal(){
+  document.getElementById('f-capa-id').value = '';
+  document.getElementById('f-capa-audit-id').value = '';
+  document.getElementById('f-capa-finding').value = '';
+  document.getElementById('f-capa-dept').value = '';
+  document.getElementById('f-capa-assigned').value = '';
+  document.getElementById('f-capa-due').value = '';
+  sv('f-capa-status','Open');
+  document.getElementById('f-capa-notes').value = '';
+  document.getElementById('t-ipc-capa').textContent = 'New Corrective Action';
+  openModal('m-ipc-capa');
+}
+
+function saveIPCCapa(){
+  const id = v('f-capa-id');
+  const finding = v('f-capa-finding');
+  const assigned = v('f-capa-assigned');
+  const due = v('f-capa-due');
+  if(!finding || !assigned || !due){ toast('Please fill in Finding, Assigned To and Due Date','error'); return; }
+
+  const rec = {
+    id: id || genId('CAPA'),
+    auditId: v('f-capa-audit-id'),
+    finding, department: v('f-capa-dept'),
+    assignedTo: assigned, dueDate: due,
+    status: v('f-capa-status'), notes: v('f-capa-notes'),
+    completedDate: v('f-capa-status')==='Completed' ? (today ? today() : new Date().toISOString().slice(0,10)) : '',
+  };
+  const data = DB.get('ipc_capa');
+  const idx = data.findIndex(x => x.id === rec.id);
+  if(idx >= 0) data[idx] = rec; else data.unshift(rec);
+  DB.set('ipc_capa', data);
+  sbSet('ipc_capa', data);
+  closeModal('m-ipc-capa');
+  renderIPCCapaList();
+  updateIPCAStats();
+  toast('✅ Corrective action saved','success');
+}
+
+function editIPCCapa(id){
+  const rec = DB.get('ipc_capa').find(c => c.id === id);
+  if(!rec){ toast('Not found','error'); return; }
+  document.getElementById('f-capa-id').value = rec.id;
+  document.getElementById('f-capa-audit-id').value = rec.auditId || '';
+  document.getElementById('f-capa-finding').value = rec.finding || '';
+  document.getElementById('f-capa-dept').value = rec.department || '';
+  document.getElementById('f-capa-assigned').value = rec.assignedTo || '';
+  document.getElementById('f-capa-due').value = rec.dueDate || '';
+  sv('f-capa-status', rec.status || 'Open');
+  document.getElementById('f-capa-notes').value = rec.notes || '';
+  document.getElementById('t-ipc-capa').textContent = 'Edit Corrective Action';
+  openModal('m-ipc-capa');
+}
+
+function renderIPCCapaList(){
+  const tb = document.getElementById('tb-ipca-capa');
+  if(!tb) return;
+  const statusFilter = (document.getElementById('ipca-capa-filter-status')||{value:''}).value;
+  let data = DB.get('ipc_capa');
+  const today_ = new Date().toISOString().slice(0,10);
+
+  // Mark overdue dynamically (open/in-progress items past their due date)
+  data = data.map(c => {
+    const isOverdue = c.status !== 'Completed' && c.dueDate && c.dueDate < today_;
+    return {...c, _displayStatus: isOverdue ? 'Overdue' : c.status};
+  });
+
+  if(statusFilter) data = data.filter(c => c._displayStatus === statusFilter);
+  data = [...data].sort((a,b)=>(a.dueDate||'').localeCompare(b.dueDate||''));
+
+  if(!data.length){
+    tb.innerHTML = '<tr><td colspan="6" style="text-align:center;padding:32px;color:var(--txt2)">No corrective actions logged yet.</td></tr>';
+    return;
+  }
+  const statusColor = {Open:'#dc2626','In Progress':'#d97706',Completed:'#16a34a',Overdue:'#991b1b'};
+  tb.innerHTML = data.map(c => `<tr>
+    <td>${c.finding}</td>
+    <td>${c.department||''}</td>
+    <td>${c.assignedTo||''}</td>
+    <td>${c.dueDate||''}</td>
+    <td style="text-align:center"><span style="background:${statusColor[c._displayStatus]}22;color:${statusColor[c._displayStatus]};padding:3px 10px;border-radius:12px;font-size:11px;font-weight:700">${c._displayStatus}</span></td>
+    <td>${rowBtns('ipc_capa',c.id,"viewIPCCapa('"+c.id+"')","editIPCCapa('"+c.id+"')","deleteRecord('ipc_capa','"+c.id+"',renderIPCCapaList)")}</td>
+  </tr>`).join('');
+}
+
+function viewIPCCapa(id){
+  const rec = DB.get('ipc_capa').find(c => c.id === id);
+  if(!rec){ toast('Not found','error'); return; }
+  const html = `<div style="font-size:13px;line-height:1.7">
+    <p><b>Finding:</b> ${rec.finding}</p>
+    <p><b>Department:</b> ${rec.department||'—'}</p>
+    <p><b>Assigned To:</b> ${rec.assignedTo}</p>
+    <p><b>Due Date:</b> ${rec.dueDate}</p>
+    <p><b>Status:</b> ${rec.status}</p>
+    ${rec.notes ? '<p><b>Notes:</b> '+rec.notes+'</p>' : ''}
+  </div>`;
+  showViewModal('Corrective Action', rec.finding, html, [
+    {label:'🖨 Print', cls:'primary', fn:"printSection('Corrective Action',document.getElementById('view-body').innerHTML)"}
+  ]);
+}
+
+function printIPCCapaList(){
+  const tbl = document.getElementById('tbl-ipca-capa');
+  if(!tbl) return;
+  const clone = tbl.cloneNode(true);
+  clone.querySelectorAll('tr').forEach(row => { const cells = row.querySelectorAll('th,td'); if(cells.length) cells[cells.length-1].remove(); });
+  printSection('IPC Corrective Action Plan', clone.outerHTML);
+}
+
+// ── OVERDUE NOTIFICATIONS ─────────────────────────────────────────────────
+function checkIPCOverdueNotifications(){
+  const capas = DB.get('ipc_capa');
+  const today_ = new Date().toISOString().slice(0,10);
+  const overdue = capas.filter(c => c.status !== 'Completed' && c.dueDate && c.dueDate < today_);
+  if(overdue.length && typeof toast === 'function'){
+    toast('⚠️ '+overdue.length+' IPC corrective action(s) are overdue','warning');
+  }
+}
+
+// ── SETUP: DEPARTMENTS ────────────────────────────────────────────────────
+function renderIPCSetup(){
+  renderIPCDeptList();
+  renderIPCChecklistSetup();
+}
+
+function renderIPCDeptList(){
+  const el = document.getElementById('ipca-dept-list');
+  if(!el) return;
+  const depts = DB.get('ipc_departments');
+  if(!depts.length){
+    el.innerHTML = '<div style="padding:16px;color:var(--txt2);font-size:12px;text-align:center">No departments yet.</div>';
+    return;
+  }
+  el.innerHTML = depts.map(d => `<div style="display:flex;align-items:center;justify-content:space-between;padding:8px 10px;border-bottom:1px solid var(--bd)">
+    <div><b style="font-size:13px">${d.name}</b> <span style="font-size:10px;color:${d.status==='Active'?'var(--green,#16a34a)':'var(--txt2)'};margin-left:6px">${d.status}</span></div>
+    <div style="display:flex;gap:6px">
+      <button class="btn icon sm" onclick="editIPCDept('${d.id}')">✏️</button>
+      <button class="btn icon sm" onclick="deleteRecord('ipc_departments','${d.id}',renderIPCDeptList)">🗑️</button>
+    </div>
+  </div>`).join('');
+}
+
+function openIPCDeptModal(){
+  document.getElementById('f-ipcd-id').value = '';
+  document.getElementById('f-ipcd-name').value = '';
+  sv('f-ipcd-status','Active');
+  document.getElementById('t-ipc-dept').textContent = 'New Department';
+  openModal('m-ipc-dept');
+}
+
+function editIPCDept(id){
+  const rec = DB.get('ipc_departments').find(d => d.id === id);
+  if(!rec) return;
+  document.getElementById('f-ipcd-id').value = rec.id;
+  document.getElementById('f-ipcd-name').value = rec.name;
+  sv('f-ipcd-status', rec.status || 'Active');
+  document.getElementById('t-ipc-dept').textContent = 'Edit Department';
+  openModal('m-ipc-dept');
+}
+
+function saveIPCDept(){
+  const id = v('f-ipcd-id');
+  const name = v('f-ipcd-name');
+  if(!name){ toast('Please enter a department name','error'); return; }
+  const rec = { id: id || genId('IPD'), name, status: v('f-ipcd-status') };
+  const data = DB.get('ipc_departments');
+  const idx = data.findIndex(x => x.id === rec.id);
+  if(idx >= 0) data[idx] = rec; else data.push(rec);
+  DB.set('ipc_departments', data);
+  sbSet('ipc_departments', data);
+  closeModal('m-ipc-dept');
+  renderIPCDeptList();
+  populateIPCDeptSelects();
+  toast('✅ Department saved','success');
+}
+
+// ── SETUP: CHECKLIST CATEGORIES & ITEMS ──────────────────────────────────
+function renderIPCChecklistSetup(){
+  const el = document.getElementById('ipca-checklist-list');
+  if(!el) return;
+  const cats = [...DB.get('ipc_checklist_categories')].sort((a,b)=>(a.order||0)-(b.order||0));
+  const items = DB.get('ipc_checklist_items');
+
+  if(!cats.length){
+    el.innerHTML = '<div style="padding:16px;color:var(--txt2);font-size:12px;text-align:center">No categories yet.</div>';
+    return;
+  }
+
+  el.innerHTML = cats.map(cat => {
+    const catItems = items.filter(it => it.categoryId === cat.id).sort((a,b)=>(a.order||0)-(b.order||0));
+    const itemRows = catItems.map(it => `<div style="display:flex;align-items:center;justify-content:space-between;padding:5px 8px;border-bottom:1px solid var(--bd);font-size:11.5px">
+      <div style="flex:1">${it.text} <span style="color:var(--txt2)">(max ${it.maxScore})</span></div>
+      <div style="display:flex;gap:4px">
+        <button class="btn icon sm" onclick="editIPCItem('${it.id}')">✏️</button>
+        <button class="btn icon sm" onclick="deleteRecord('ipc_checklist_items','${it.id}',renderIPCChecklistSetup)">🗑️</button>
+      </div>
+    </div>`).join('');
+    return `<div style="margin-bottom:10px;border:1px solid var(--bd);border-radius:8px;overflow:hidden">
+      <div style="background:var(--bg2);padding:7px 10px;display:flex;align-items:center;justify-content:space-between">
+        <b style="font-size:12.5px">${cat.name}</b>
+        <div style="display:flex;gap:6px">
+          <button class="btn sm" onclick="openIPCItemModal('${cat.id}')">+ Item</button>
+          <button class="btn icon sm" onclick="editIPCCategory('${cat.id}')">✏️</button>
+          <button class="btn icon sm" onclick="deleteRecord('ipc_checklist_categories','${cat.id}',renderIPCChecklistSetup)">🗑️</button>
+        </div>
+      </div>
+      ${itemRows || '<div style="padding:8px;color:var(--txt2);font-size:11px">No items yet</div>'}
+    </div>`;
+  }).join('');
+}
+
+function openIPCCategoryModal(){
+  document.getElementById('f-ipcc-id').value = '';
+  document.getElementById('f-ipcc-name').value = '';
+  document.getElementById('t-ipc-category').textContent = 'New Checklist Category';
+  openModal('m-ipc-category');
+}
+
+function editIPCCategory(id){
+  const rec = DB.get('ipc_checklist_categories').find(c => c.id === id);
+  if(!rec) return;
+  document.getElementById('f-ipcc-id').value = rec.id;
+  document.getElementById('f-ipcc-name').value = rec.name;
+  document.getElementById('t-ipc-category').textContent = 'Edit Category';
+  openModal('m-ipc-category');
+}
+
+function saveIPCCategory(){
+  const id = v('f-ipcc-id');
+  const name = v('f-ipcc-name');
+  if(!name){ toast('Please enter a category name','error'); return; }
+  const data = DB.get('ipc_checklist_categories');
+  const rec = { id: id || genId('IPCAT'), name, order: id ? (data.find(x=>x.id===id)||{}).order : data.length };
+  const idx = data.findIndex(x => x.id === rec.id);
+  if(idx >= 0) data[idx] = rec; else data.push(rec);
+  DB.set('ipc_checklist_categories', data);
+  sbSet('ipc_checklist_categories', data);
+  closeModal('m-ipc-category');
+  renderIPCChecklistSetup();
+  toast('✅ Category saved','success');
+}
+
+function openIPCItemModal(categoryId){
+  document.getElementById('f-ipci-id').value = '';
+  document.getElementById('f-ipci-category-id').value = categoryId;
+  document.getElementById('f-ipci-text').value = '';
+  document.getElementById('f-ipci-max').value = '5';
+  document.getElementById('t-ipc-item').textContent = 'New Checklist Item';
+  openModal('m-ipc-item');
+}
+
+function editIPCItem(id){
+  const rec = DB.get('ipc_checklist_items').find(it => it.id === id);
+  if(!rec) return;
+  document.getElementById('f-ipci-id').value = rec.id;
+  document.getElementById('f-ipci-category-id').value = rec.categoryId;
+  document.getElementById('f-ipci-text').value = rec.text;
+  document.getElementById('f-ipci-max').value = rec.maxScore;
+  document.getElementById('t-ipc-item').textContent = 'Edit Checklist Item';
+  openModal('m-ipc-item');
+}
+
+function saveIPCItem(){
+  const id = v('f-ipci-id');
+  const text = v('f-ipci-text');
+  const maxScore = parseFloat(v('f-ipci-max')) || 1;
+  const categoryId = v('f-ipci-category-id');
+  if(!text){ toast('Please enter the checklist item text','error'); return; }
+  const data = DB.get('ipc_checklist_items');
+  const rec = { id: id || genId('IPCI'), categoryId, text, maxScore, order: id ? (data.find(x=>x.id===id)||{}).order : data.filter(x=>x.categoryId===categoryId).length };
+  const idx = data.findIndex(x => x.id === rec.id);
+  if(idx >= 0) data[idx] = rec; else data.push(rec);
+  DB.set('ipc_checklist_items', data);
+  sbSet('ipc_checklist_items', data);
+  closeModal('m-ipc-item');
+  renderIPCChecklistSetup();
+  toast('✅ Checklist item saved','success');
+}
+
 </script>
 
 <div id="m-ecd-monthly" class="modal-overlay"><div class="modal wide"><div class="modal-header"><div class="modal-header-icon" style="background:#f3e8ff">&#128118;</div><h3 id="hdr-m-ecd-monthly">ECD Monthly Aggregation Report</h3><button class="btn icon" onclick="closeModal('m-ecd-monthly')">&#10005;</button></div><div class="modal-body">
@@ -13014,7 +13896,95 @@ function printScorecardTable(){
 </div>
 </div><div class="modal-footer"><button class="btn" onclick="closeModal('m-ecd-monthly')">Cancel</button><button class="btn primary" onclick="saveRecord('ecd_monthly','m-ecd-monthly',ecdMonthlyFields,renderECDMonthly)">&#128190; Save</button></div></div></div>
 </body>
-</html><div id="m-scorecard" class="modal-overlay">
+</html><div id="m-ipc-dept" class="modal-overlay">
+<div class="modal">
+  <div class="modal-header"><div class="modal-header-icon" style="background:var(--teal-l)">🏥</div><h3 id="t-ipc-dept">New Department</h3><button class="btn icon" onclick="closeModal('m-ipc-dept')">✕</button></div>
+  <div class="modal-body">
+    <input type="hidden" id="f-ipcd-id">
+    <div class="form-row"><div class="form-group"><label class="required">Department Name</label><input type="text" id="f-ipcd-name" placeholder="e.g. OPD, MCH, ART, Laboratory"></div></div>
+    <div class="form-row"><div class="form-group"><label>Status</label><select id="f-ipcd-status"><option>Active</option><option>Inactive</option></select></div></div>
+  </div>
+  <div class="modal-footer"><button class="btn" onclick="closeModal('m-ipc-dept')">Cancel</button><button class="btn primary" onclick="saveIPCDept()">💾 Save</button></div>
+</div>
+</div>
+
+<div id="m-ipc-category" class="modal-overlay">
+<div class="modal">
+  <div class="modal-header"><div class="modal-header-icon" style="background:var(--teal-l)">📋</div><h3 id="t-ipc-category">New Checklist Category</h3><button class="btn icon" onclick="closeModal('m-ipc-category')">✕</button></div>
+  <div class="modal-body">
+    <input type="hidden" id="f-ipcc-id">
+    <div class="form-row"><div class="form-group"><label class="required">Category Name</label><input type="text" id="f-ipcc-name" placeholder="e.g. Hand Hygiene, PPE Compliance"></div></div>
+  </div>
+  <div class="modal-footer"><button class="btn" onclick="closeModal('m-ipc-category')">Cancel</button><button class="btn primary" onclick="saveIPCCategory()">💾 Save</button></div>
+</div>
+</div>
+
+<div id="m-ipc-item" class="modal-overlay">
+<div class="modal">
+  <div class="modal-header"><div class="modal-header-icon" style="background:var(--teal-l)">✅</div><h3 id="t-ipc-item">New Checklist Item</h3><button class="btn icon" onclick="closeModal('m-ipc-item')">✕</button></div>
+  <div class="modal-body">
+    <input type="hidden" id="f-ipci-id">
+    <input type="hidden" id="f-ipci-category-id">
+    <div class="form-row"><div class="form-group" style="flex:1"><label class="required">Checklist Item</label><textarea id="f-ipci-text" rows="2" placeholder="e.g. Hand sanitizer available at point of care"></textarea></div></div>
+    <div class="form-row"><div class="form-group"><label class="required">Maximum Score</label><input type="number" id="f-ipci-max" min="1" max="100" placeholder="e.g. 5"></div></div>
+  </div>
+  <div class="modal-footer"><button class="btn" onclick="closeModal('m-ipc-item')">Cancel</button><button class="btn primary" onclick="saveIPCItem()">💾 Save</button></div>
+</div>
+</div>
+
+<div id="m-ipc-audit" class="modal-overlay">
+<div class="modal xl">
+  <div class="modal-header"><div class="modal-header-icon" style="background:var(--teal-l)">📋</div><h3 id="t-ipc-audit">New IPC Audit</h3><button class="btn icon" onclick="closeModal('m-ipc-audit')">✕</button></div>
+  <div class="modal-body">
+    <input type="hidden" id="f-ipca-id">
+
+    <div class="form-section">📍 Audit Details</div>
+    <div class="form-row">
+      <div class="form-group"><label class="required">Department</label><select id="f-ipca-dept"></select></div>
+      <div class="form-group"><label class="required">Frequency</label><select id="f-ipca-freq"><option>Weekly</option><option>Monthly</option></select></div>
+    </div>
+    <div class="form-row">
+      <div class="form-group"><label class="required">Audit Date</label><input type="date" id="f-ipca-date"></div>
+      <div class="form-group"><label class="required">Auditor</label><input type="text" id="f-ipca-auditor" placeholder="Name of auditor"></div>
+    </div>
+
+    <div class="form-section" style="margin-top:14px">✅ Audit Checklist</div>
+    <div id="ipca-checklist-body"></div>
+    <div style="background:var(--teal-l);border-radius:8px;padding:10px 14px;margin:12px 0;display:flex;justify-content:space-between;align-items:center">
+      <span style="font-weight:700;color:var(--teal-d)">Total Score</span>
+      <span style="font-weight:800;font-size:16px;color:var(--teal-d)" id="ipca-live-total">0 / 0 (0%)</span>
+    </div>
+
+    <div class="form-section">📝 Findings &amp; Recommendations</div>
+    <div class="form-row"><div class="form-group" style="flex:1"><label>Findings / Observations</label><textarea id="f-ipca-findings" rows="3" placeholder="Key findings observed during this audit..."></textarea></div></div>
+    <div class="form-row"><div class="form-group" style="flex:1"><label>Recommendations</label><textarea id="f-ipca-recommendations" rows="3" placeholder="Recommendations for improvement..."></textarea></div></div>
+  </div>
+  <div class="modal-footer"><button class="btn" onclick="closeModal('m-ipc-audit')">Cancel</button><button class="btn primary" onclick="saveIPCAudit()">💾 Save Audit</button></div>
+</div>
+</div>
+
+<div id="m-ipc-capa" class="modal-overlay">
+<div class="modal">
+  <div class="modal-header"><div class="modal-header-icon" style="background:var(--amber-l,#fef3c7)">✅</div><h3 id="t-ipc-capa">New Corrective Action</h3><button class="btn icon" onclick="closeModal('m-ipc-capa')">✕</button></div>
+  <div class="modal-body">
+    <input type="hidden" id="f-capa-id">
+    <input type="hidden" id="f-capa-audit-id">
+    <div class="form-row"><div class="form-group" style="flex:1"><label class="required">Finding</label><textarea id="f-capa-finding" rows="2" placeholder="What needs to be corrected..."></textarea></div></div>
+    <div class="form-row">
+      <div class="form-group"><label>Department</label><input type="text" id="f-capa-dept" readonly style="background:var(--bg2)"></div>
+    </div>
+    <div class="form-row">
+      <div class="form-group"><label class="required">Assigned To</label><input type="text" id="f-capa-assigned" placeholder="Responsible staff member"></div>
+      <div class="form-group"><label class="required">Due Date</label><input type="date" id="f-capa-due"></div>
+    </div>
+    <div class="form-row"><div class="form-group"><label>Status</label><select id="f-capa-status"><option>Open</option><option>In Progress</option><option>Completed</option></select></div></div>
+    <div class="form-row"><div class="form-group" style="flex:1"><label>Notes</label><textarea id="f-capa-notes" rows="2" placeholder="Progress notes..."></textarea></div></div>
+  </div>
+  <div class="modal-footer"><button class="btn" onclick="closeModal('m-ipc-capa')">Cancel</button><button class="btn primary" onclick="saveIPCCapa()">💾 Save</button></div>
+</div>
+</div>
+
+<div id="m-scorecard" class="modal-overlay">
 <div class="modal wide" style="max-width:720px">
   <div class="modal-header">
     <div class="modal-header-icon" style="background:var(--teal-l)">📋</div>
