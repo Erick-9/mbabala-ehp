@@ -13112,40 +13112,110 @@ function ipcaRatingFor(pct){
 }
 
 function ipcaSeedDefaults(){
-  // Seed default departments and checklist categories/items ONLY if nothing exists yet,
-  // so this never overwrites anything you've already customised.
+  // Department-specific IPC audit structure: Department -> Sections -> Items.
+  // Seeded ONLY if departments don't exist yet, so this never overwrites anything
+  // you've customised. Each department owns its own sections (even same-named
+  // sections like "Hand Hygiene" are separate, independently-editable rows per
+  // department) so audits can be tailored to each department's actual IPC risks.
   if(!DB.get('ipc_departments').length){
-    const depts = ['OPD','MCH','ART','Laboratory','Pharmacy','Environmental Health','TB Corner','Inpatient/Wards'];
-    const data = depts.map(name => ({id: genId('IPD'), name, status:'Active'}));
-    DB.set('ipc_departments', data);
-    sbSet('ipc_departments', data);
+    const spec = {
+  "OPD": {
+    "Hand Hygiene": ["Hand hygiene performed before and after patient contact."],
+    "PPE Compliance": ["Appropriate PPE used during patient care."],
+    "Patient Care Practices": ["Examination couch cleaned between patients.","Patient care equipment cleaned after use."],
+    "Injection Safety": ["Sharps disposed of immediately after use."],
+    "Equipment Handling": ["Patient care equipment cleaned after use."],
+    "Waste Management": ["Waste correctly segregated."],
+    "Staff Compliance": [],
+    "Documentation": []
+  },
+  "MCH": {
+    "Hand Hygiene": [],
+    "PPE Compliance": ["Safety box available within reach during immunization."],
+    "Immunization Safety": ["New sterile syringe used for every child.","Safety box available within reach during immunization."],
+    "ANC IPC Practices": [],
+    "Labour and Delivery IPC Practices": ["Aseptic technique maintained during delivery.","Sterile delivery equipment used.","Delivery instruments handled safely."],
+    "Newborn Care IPC": ["Newborn care performed using clean technique."],
+    "Injection Safety": ["New sterile syringe used for every child."],
+    "Waste Management": []
+  },
+  "ART": {
+    "Hand Hygiene": ["Hand hygiene performed between patients."],
+    "PPE Compliance": [],
+    "Patient Care Procedures": ["Examination couch disinfected between patients."],
+    "Dressing/Wound Care": ["Dressing procedures performed using aseptic technique."],
+    "Injection Safety": ["Sharps disposed of correctly."],
+    "Equipment Handling": ["Reusable equipment disinfected after use."],
+    "Waste Management": []
+  },
+  "Laboratory": {
+    "Hand Hygiene": [],
+    "PPE Compliance": ["PPE worn during specimen handling."],
+    "Specimen Collection and Handling": ["Specimens labelled correctly.","Specimens transported safely."],
+    "Biosafety Practices": ["PPE worn during specimen handling."],
+    "Equipment Decontamination": ["Work surfaces disinfected after testing."],
+    "Spill Management": ["Spills managed according to procedure."],
+    "Laboratory Waste Management": ["Laboratory waste segregated correctly."]
+  },
+  "Pharmacy": {
+    "Hand Hygiene": [],
+    "PPE Compliance": ["Appropriate PPE used when required."],
+    "Medicine Handling and Dispensing": ["Medicines protected from contamination."],
+    "Storage Practices": ["Expired medicines separated."],
+    "Clean Dispensing Environment": ["Dispensing area maintained clean.","Medicine shelves cleaned regularly."],
+    "Waste Management": []
+  },
+  "TB Corner": {
+    "Hand Hygiene": [],
+    "PPE Compliance": ["N95 respirator used correctly when indicated."],
+    "Respiratory Infection Prevention": ["Respiratory hygiene practices followed."],
+    "Patient Flow Management": ["Patients educated on cough etiquette."],
+    "Sputum Collection Practices": ["Sputum collection done in designated area."],
+    "Ventilation Practices": ["Adequate ventilation maintained."],
+    "Waste Management": []
+  },
+  "Inpatient/Wards": {
+    "Hand Hygiene": ["Hand hygiene performed before and after patient care."],
+    "PPE Compliance": [],
+    "Patient Care Practices": ["Patient equipment cleaned between patients."],
+    "Bedside IPC Practices": ["Bedside environment maintained clean."],
+    "Isolation Precautions": ["Isolation precautions followed when required."],
+    "Linen Management": ["Linen handled safely."],
+    "Invasive Procedure Safety": [],
+    "Waste Management": []
+  },
+  "Environmental Health": {
+    "Environmental Cleaning": [],
+    "Healthcare Waste Management": ["Healthcare waste disposal practices followed.","Waste transported safely."],
+    "Disinfection Practices": ["Correct disinfectant concentration prepared."],
+    "Cleaning Equipment Management": ["Cleaning equipment maintained properly."],
+    "Spill Management": [],
+    "WASH Practices": [],
+    "Sanitation and Hygiene Monitoring": [],
+    "PPE During Waste Handling": ["PPE worn during waste handling."]
   }
-  if(!DB.get('ipc_checklist_categories').length){
-    const cats = ['Hand Hygiene','PPE Compliance','Waste Segregation','Environmental Cleaning','Sharps Management','Decontamination & Sterilization','IPC Supplies/Corner','Documentation','Staff Compliance'];
-    const catData = cats.map((name,i) => ({id: genId('IPCAT'), name, order:i}));
-    DB.set('ipc_checklist_categories', catData);
-    sbSet('ipc_checklist_categories', catData);
+};
+    const deptNames = Object.keys(spec);
+    const deptData = deptNames.map(name => ({id: genId('IPD'), name, status:'Active'}));
+    DB.set('ipc_departments', deptData);
+    sbSet('ipc_departments', deptData);
 
-    // A few sensible starter items per category — fully editable/removable afterwards.
-    const starterItems = {
-      'Hand Hygiene': ['Hand sanitizer available at point of care','Handwashing facilities functional with soap and water','Staff observed practicing correct hand hygiene technique'],
-      'PPE Compliance': ['Adequate PPE stock available (gloves, masks, gowns)','Staff wearing appropriate PPE for the task','PPE disposed of correctly after use'],
-      'Waste Segregation': ['Colour-coded waste bins available and correctly used','Sharps container not overfilled (below 3/4 full)','General waste separated from infectious waste'],
-      'Environmental Cleaning': ['Surfaces visibly clean and free of dust/debris','Cleaning schedule visible and up to date','Cleaning equipment stored appropriately'],
-      'Sharps Management': ['Sharps container available at point of use','No exposed/uncapped sharps observed','Sharps injury log available and up to date'],
-      'Decontamination & Sterilization': ['Instruments processed according to protocol','Sterilization equipment functioning and validated','Clean and dirty processing areas separated'],
-      'IPC Supplies/Corner': ['IPC corner/station stocked and organised','IPC guidelines/posters visibly displayed'],
-      'Documentation': ['IPC audit records/checklists available on file','Incident/near-miss reporting forms accessible'],
-      'Staff Compliance': ['Staff aware of IPC protocols for the department','Staff able to demonstrate correct isolation/precaution procedures'],
-    };
-    const allItems = [];
-    catData.forEach(cat => {
-      (starterItems[cat.name]||[]).forEach((text,i) => {
-        allItems.push({id: genId('IPCI'), categoryId: cat.id, text, maxScore: 5, order: i});
+    const catData = [];
+    const itemData = [];
+    deptData.forEach(dept => {
+      const sections = spec[dept.name] || {};
+      Object.keys(sections).forEach((secName, secOrder) => {
+        const cat = {id: genId('IPCAT'), departmentId: dept.id, name: secName, order: secOrder};
+        catData.push(cat);
+        (sections[secName]||[]).forEach((text, itemOrder) => {
+          itemData.push({id: genId('IPCI'), categoryId: cat.id, text, order: itemOrder});
+        });
       });
     });
-    DB.set('ipc_checklist_items', allItems);
-    sbSet('ipc_checklist_items', allItems);
+    DB.set('ipc_checklist_categories', catData);
+    sbSet('ipc_checklist_categories', catData);
+    DB.set('ipc_checklist_items', itemData);
+    sbSet('ipc_checklist_items', itemData);
   }
 }
 
@@ -13158,11 +13228,24 @@ function renderIPCAudit(){
 
 function populateIPCDeptSelects(){
   const depts = DB.get('ipc_departments').filter(d => d.status !== 'Inactive');
-  const opts = depts.map(d => `<option value="${d.name}">${d.name}</option>`).join('');
+  const opts = depts.map(d => `<option value="${d.name}" data-dept-id="${d.id}">${d.name}</option>`).join('');
   const filterSel = document.getElementById('ipca-filter-dept');
   if(filterSel){ const cur = filterSel.value; filterSel.innerHTML = '<option value="">All Departments</option>' + opts; filterSel.value = cur; }
   const formSel = document.getElementById('f-ipca-dept');
-  if(formSel){ formSel.innerHTML = opts; }
+  if(formSel){ formSel.innerHTML = '<option value="">Select department...</option>' + opts; }
+}
+
+// Looks up a department's ID from its name (used to filter the checklist)
+function ipcaDeptIdByName(name){
+  const dept = DB.get('ipc_departments').find(d => d.name === name);
+  return dept ? dept.id : null;
+}
+
+// Called when the department dropdown changes in the audit form — reloads the checklist for that department
+function onIPCAuditDeptChange(){
+  const deptName = v('f-ipca-dept');
+  const deptId = deptName ? ipcaDeptIdByName(deptName) : null;
+  buildIPCChecklistForm({}, deptId);
 }
 
 // ── STATS (top of page) ──────────────────────────────────────────────────
@@ -13242,38 +13325,56 @@ function openIPCAuditModal(){
   document.getElementById('f-ipca-recommendations').value = '';
   document.getElementById('t-ipc-audit').textContent = 'New IPC Audit';
   populateIPCDeptSelects();
-  buildIPCChecklistForm({});
+  sv('f-ipca-dept','');
+  buildIPCChecklistForm({}, null);
   openModal('m-ipc-audit');
 }
 
-function buildIPCChecklistForm(existingScores){
+function buildIPCChecklistForm(existingScores, departmentId){
   existingScores = existingScores || {};
-  const cats = [...DB.get('ipc_checklist_categories')].sort((a,b)=>(a.order||0)-(b.order||0));
+  const allCats = [...DB.get('ipc_checklist_categories')].sort((a,b)=>(a.order||0)-(b.order||0));
+  const cats = departmentId ? allCats.filter(c => c.departmentId === departmentId) : [];
   const items = DB.get('ipc_checklist_items');
   const body = document.getElementById('ipca-checklist-body');
   if(!body) return;
 
-  if(!cats.length){
-    body.innerHTML = '<div style="padding:16px;color:var(--txt2);font-size:12px;text-align:center">No checklist categories set up yet. Go to the Departments &amp; Checklist tab to add some.</div>';
+  if(!departmentId){
+    body.innerHTML = '<div style="padding:16px;color:var(--txt2);font-size:12px;text-align:center">Select a department above to load its IPC audit checklist.</div>';
+    updateIPCALiveTotal();
     return;
   }
+  if(!cats.length){
+    body.innerHTML = '<div style="padding:16px;color:var(--txt2);font-size:12px;text-align:center">No checklist sections set up yet for this department. Go to the Departments &amp; Checklist tab to add some.</div>';
+    updateIPCALiveTotal();
+    return;
+  }
+
+  const statusOptions = [
+    {val:'compliant', label:'✓ Present/Compliant', color:'#16a34a'},
+    {val:'noncompliant', label:'✗ Not Present/Non-compliant', color:'#dc2626'},
+    {val:'na', label:'N/A Not Applicable', color:'#6b7280'},
+  ];
 
   body.innerHTML = cats.map(cat => {
     const catItems = items.filter(it => it.categoryId === cat.id).sort((a,b)=>(a.order||0)-(b.order||0));
     if(!catItems.length) return '';
     const rows = catItems.map(it => {
       const ex = existingScores[it.id] || {};
-      return `<tr data-max="${it.maxScore}">
+      const curStatus = ex.status || '';
+      const btns = statusOptions.map(opt => {
+        const active = curStatus === opt.val;
+        return `<button type="button" class="ipca-status-btn" data-item-id="${it.id}" data-status="${opt.val}" onclick="setIPCItemStatus('${it.id}','${opt.val}')" style="padding:4px 8px;border-radius:6px;font-size:10.5px;font-weight:700;border:1.5px solid ${opt.color};background:${active?opt.color:'transparent'};color:${active?'#fff':opt.color};cursor:pointer;white-space:nowrap">${opt.label}</button>`;
+      }).join(' ');
+      return `<tr data-item-id="${it.id}">
         <td style="padding:6px 8px;font-size:12px">${it.text}</td>
-        <td style="padding:6px 8px;text-align:center;font-size:11px;color:var(--txt2)">/ ${it.maxScore}</td>
-        <td style="padding:6px 8px;text-align:center"><input type="number" class="ipca-score-input" data-item-id="${it.id}" min="0" max="${it.maxScore}" value="${ex.score!==undefined?ex.score:''}" placeholder="0" style="width:60px;text-align:center;padding:4px;border:1px solid var(--bd);border-radius:6px;font-size:13px;background:var(--bg);color:var(--txt)" oninput="updateIPCALiveTotal()"></td>
+        <td style="padding:6px 8px;text-align:center"><input type="hidden" class="ipca-status-input" data-item-id="${it.id}" value="${curStatus}"><div style="display:flex;gap:4px;flex-wrap:wrap;justify-content:center">${btns}</div></td>
         <td style="padding:6px 8px"><input type="text" class="ipca-remarks-input" data-item-id="${it.id}" value="${(ex.remarks||'').replace(/"/g,'&quot;')}" placeholder="Remarks..." style="width:100%;padding:4px;border:1px solid var(--bd);border-radius:6px;font-size:12px;background:var(--bg);color:var(--txt)"></td>
       </tr>`;
     }).join('');
     return `<div style="margin-bottom:12px">
       <div style="background:var(--teal-d);color:#fff;padding:6px 10px;font-size:12px;font-weight:700;border-radius:6px 6px 0 0">${cat.name}</div>
       <table style="width:100%;border-collapse:collapse;border:1px solid var(--bd);border-top:none">
-        <thead><tr style="background:var(--bg2)"><th style="padding:6px 8px;text-align:left;font-size:11px">Item</th><th style="padding:6px 8px;font-size:11px">Max</th><th style="padding:6px 8px;font-size:11px">Score</th><th style="padding:6px 8px;text-align:left;font-size:11px">Remarks</th></tr></thead>
+        <thead><tr style="background:var(--bg2)"><th style="padding:6px 8px;text-align:left;font-size:11px">Item</th><th style="padding:6px 8px;font-size:11px">Compliance Status</th><th style="padding:6px 8px;text-align:left;font-size:11px">Remarks</th></tr></thead>
         <tbody>${rows}</tbody>
       </table>
     </div>`;
@@ -13282,14 +13383,29 @@ function buildIPCChecklistForm(existingScores){
   updateIPCALiveTotal();
 }
 
+function setIPCItemStatus(itemId, status){
+  const hiddenInput = document.querySelector('.ipca-status-input[data-item-id="'+itemId+'"]');
+  if(hiddenInput) hiddenInput.value = status;
+  document.querySelectorAll('.ipca-status-btn[data-item-id="'+itemId+'"]').forEach(btn => {
+    const isActive = btn.getAttribute('data-status') === status;
+    const color = btn.style.borderColor;
+    btn.style.background = isActive ? color : 'transparent';
+    btn.style.color = isActive ? '#fff' : color;
+  });
+  updateIPCALiveTotal();
+}
+
+const IPCA_POINTS_PER_COMPLIANT_ITEM = 2;
+
 function updateIPCALiveTotal(){
-  const rows = document.querySelectorAll('#ipca-checklist-body tr[data-max]');
+  const rows = document.querySelectorAll('#ipca-checklist-body tr[data-item-id]');
   let total = 0, max = 0;
   rows.forEach(row => {
-    const m = parseFloat(row.getAttribute('data-max')) || 0;
-    const input = row.querySelector('.ipca-score-input');
-    const s = input ? (parseFloat(input.value) || 0) : 0;
-    max += m; total += Math.min(s, m);
+    const statusInput = row.querySelector('.ipca-status-input');
+    const status = statusInput ? statusInput.value : '';
+    if(status === 'na') return; // N/A items are excluded entirely from both total and max
+    max += IPCA_POINTS_PER_COMPLIANT_ITEM;
+    if(status === 'compliant') total += IPCA_POINTS_PER_COMPLIANT_ITEM;
   });
   const pct = max ? Math.round((total/max)*100) : 0;
   const el = document.getElementById('ipca-live-total');
@@ -13306,14 +13422,16 @@ function saveIPCAudit(){
 
   const itemScores = [];
   let total = 0, max = 0;
-  document.querySelectorAll('#ipca-checklist-body tr[data-max]').forEach(row => {
-    const itemId = row.querySelector('.ipca-score-input').dataset.itemId;
-    const m = parseFloat(row.getAttribute('data-max')) || 0;
-    const score = Math.min(parseFloat(row.querySelector('.ipca-score-input').value) || 0, m);
+  document.querySelectorAll('#ipca-checklist-body tr[data-item-id]').forEach(row => {
+    const itemId = row.getAttribute('data-item-id');
+    const status = row.querySelector('.ipca-status-input').value || '';
     const remarks = row.querySelector('.ipca-remarks-input').value || '';
-    itemScores.push({itemId, score, remarks});
-    total += score; max += m;
+    itemScores.push({itemId, status, remarks});
+    if(status === 'na') return;
+    max += IPCA_POINTS_PER_COMPLIANT_ITEM;
+    if(status === 'compliant') total += IPCA_POINTS_PER_COMPLIANT_ITEM;
   });
+  if(!itemScores.length){ toast('This department has no checklist items set up yet','error'); return; }
   const percentage = max ? (total/max)*100 : 0;
   const rating = ipcaRatingFor(percentage).label;
 
@@ -13351,7 +13469,8 @@ function editIPCAudit(id){
   document.getElementById('f-ipca-recommendations').value = rec.recommendations || '';
   const existingScores = {};
   (rec.itemScores||[]).forEach(s => { existingScores[s.itemId] = s; });
-  buildIPCChecklistForm(existingScores);
+  const deptId = ipcaDeptIdByName(rec.department);
+  buildIPCChecklistForm(existingScores, deptId);
   openModal('m-ipc-audit');
 }
 
@@ -13359,9 +13478,12 @@ function viewIPCAudit(id){
   const rec = DB.get('ipc_audits').find(a => a.id === id);
   if(!rec){ toast('Audit not found','error'); return; }
   const s = DB.getObj('settings')||{};
-  const cats = DB.get('ipc_checklist_categories');
+  const deptId = ipcaDeptIdByName(rec.department);
+  const cats = DB.get('ipc_checklist_categories').filter(c => c.departmentId === deptId).sort((a,b)=>(a.order||0)-(b.order||0));
   const items = DB.get('ipc_checklist_items');
   const rating = ipcaRatingFor(rec.percentage||0);
+  const statusLabel = {compliant:'✓ Compliant', noncompliant:'✗ Non-compliant', na:'N/A'};
+  const statusColor = {compliant:'#16a34a', noncompliant:'#dc2626', na:'#6b7280'};
 
   let bodyHtml = `<div style="font-family:Arial,sans-serif">
     <div style="text-align:center;margin-bottom:12px;border-bottom:3px solid #1a5c4f;padding-bottom:8px">
@@ -13379,10 +13501,13 @@ function viewIPCAudit(id){
     const catItems = items.filter(it => it.categoryId === cat.id);
     if(!catItems.length) return;
     bodyHtml += `<div style="background:#1a5c4f;color:#fff;padding:5px 10px;font-size:11px;font-weight:700;margin-top:8px">${cat.name}</div>
-      <table style="width:100%;border-collapse:collapse;font-size:10.5px"><thead><tr style="background:#e8f5f0"><th style="padding:5px;text-align:left;border:1px solid #ccc">Item</th><th style="padding:5px;border:1px solid #ccc;width:60px">Score</th><th style="padding:5px;text-align:left;border:1px solid #ccc">Remarks</th></tr></thead><tbody>`;
+      <table style="width:100%;border-collapse:collapse;font-size:10.5px"><thead><tr style="background:#e8f5f0"><th style="padding:5px;text-align:left;border:1px solid #ccc">Item</th><th style="padding:5px;border:1px solid #ccc;width:110px">Status</th><th style="padding:5px;text-align:left;border:1px solid #ccc">Remarks</th></tr></thead><tbody>`;
     catItems.forEach(it => {
       const sc = (rec.itemScores||[]).find(x => x.itemId === it.id) || {};
-      bodyHtml += `<tr><td style="padding:5px;border:1px solid #ccc">${it.text}</td><td style="padding:5px;border:1px solid #ccc;text-align:center">${sc.score!==undefined?sc.score:'—'}/${it.maxScore}</td><td style="padding:5px;border:1px solid #ccc">${sc.remarks||''}</td></tr>`;
+      const st = sc.status || '';
+      const label = statusLabel[st] || '—';
+      const col = statusColor[st] || '#9ca3af';
+      bodyHtml += `<tr><td style="padding:5px;border:1px solid #ccc">${it.text}</td><td style="padding:5px;border:1px solid #ccc;text-align:center;font-weight:700;color:${col}">${label}</td><td style="padding:5px;border:1px solid #ccc">${sc.remarks||''}</td></tr>`;
     });
     bodyHtml += `</tbody></table>`;
   });
@@ -13509,22 +13634,30 @@ function renderIPCTrends(){
     }
   }
 
-  // Compliance by category — facility-wide average % per category across all audits
-  const cats = DB.get('ipc_checklist_categories');
+  // Compliance by category — facility-wide average % per SECTION NAME (grouped across
+  // departments, since each department has its own independent "Hand Hygiene" etc. section)
   const items = DB.get('ipc_checklist_items');
-  const catAverages = cats.map(cat => {
-    const catItemIds = items.filter(it => it.categoryId === cat.id).map(it => it.id);
-    let total = 0, max = 0;
-    audits.forEach(a => {
-      (a.itemScores||[]).forEach(sc => {
-        if(catItemIds.includes(sc.itemId)){
-          const item = items.find(it => it.id === sc.itemId);
-          if(item){ total += sc.score||0; max += item.maxScore||0; }
-        }
-      });
+  const categoriesById = {};
+  DB.get('ipc_checklist_categories').forEach(c => { categoriesById[c.id] = c; });
+  const itemsById = {};
+  items.forEach(it => { itemsById[it.id] = it; });
+
+  const catTotals = {}; // { sectionName: {total, max} }
+  audits.forEach(a => {
+    (a.itemScores||[]).forEach(sc => {
+      if(sc.status === 'na' || !sc.status) return;
+      const item = itemsById[sc.itemId];
+      if(!item) return;
+      const cat = categoriesById[item.categoryId];
+      if(!cat) return;
+      if(!catTotals[cat.name]) catTotals[cat.name] = {total:0, max:0};
+      catTotals[cat.name].max += IPCA_POINTS_PER_COMPLIANT_ITEM;
+      if(sc.status === 'compliant') catTotals[cat.name].total += IPCA_POINTS_PER_COMPLIANT_ITEM;
     });
-    return { name: cat.name, pct: max ? Math.round((total/max)*100) : 0 };
-  }).filter(c => c.pct > 0 || audits.length === 0);
+  });
+  const catAverages = Object.keys(catTotals).map(name => ({
+    name, pct: catTotals[name].max ? Math.round((catTotals[name].total/catTotals[name].max)*100) : 0
+  }));
 
   const ctxC = document.getElementById('ipca-chart-category');
   if(ctxC){
@@ -13765,18 +13898,36 @@ function saveIPCDept(){
 function renderIPCChecklistSetup(){
   const el = document.getElementById('ipca-checklist-list');
   if(!el) return;
-  const cats = [...DB.get('ipc_checklist_categories')].sort((a,b)=>(a.order||0)-(b.order||0));
-  const items = DB.get('ipc_checklist_items');
 
-  if(!cats.length){
-    el.innerHTML = '<div style="padding:16px;color:var(--txt2);font-size:12px;text-align:center">No categories yet.</div>';
+  // Department selector to scope which department's sections/items are being edited
+  const depts = DB.get('ipc_departments');
+  const selectedId = document.getElementById('ipca-setup-dept-select') ? document.getElementById('ipca-setup-dept-select').value : (depts[0]||{}).id;
+
+  const selectorHtml = `<div style="margin-bottom:10px;display:flex;gap:8px;align-items:center;flex-wrap:wrap">
+    <label style="font-size:12px;color:var(--txt2)">Department:</label>
+    <select id="ipca-setup-dept-select" onchange="renderIPCChecklistSetup()" style="padding:6px 10px;border:1px solid var(--bd);border-radius:8px;font-size:13px;background:var(--bg);color:var(--txt)">
+      ${depts.map(d => `<option value="${d.id}" ${d.id===selectedId?'selected':''}>${d.name}</option>`).join('')}
+    </select>
+    <button class="btn sm" onclick="openIPCCategoryModal()">+ Add Section</button>
+  </div>`;
+
+  if(!depts.length){
+    el.innerHTML = selectorHtml + '<div style="padding:16px;color:var(--txt2);font-size:12px;text-align:center">No departments yet — add one first.</div>';
     return;
   }
 
-  el.innerHTML = cats.map(cat => {
+  const cats = [...DB.get('ipc_checklist_categories')].filter(c => c.departmentId === selectedId).sort((a,b)=>(a.order||0)-(b.order||0));
+  const items = DB.get('ipc_checklist_items');
+
+  if(!cats.length){
+    el.innerHTML = selectorHtml + '<div style="padding:16px;color:var(--txt2);font-size:12px;text-align:center">No sections yet for this department.</div>';
+    return;
+  }
+
+  el.innerHTML = selectorHtml + cats.map(cat => {
     const catItems = items.filter(it => it.categoryId === cat.id).sort((a,b)=>(a.order||0)-(b.order||0));
     const itemRows = catItems.map(it => `<div style="display:flex;align-items:center;justify-content:space-between;padding:5px 8px;border-bottom:1px solid var(--bd);font-size:11.5px">
-      <div style="flex:1">${it.text} <span style="color:var(--txt2)">(max ${it.maxScore})</span></div>
+      <div style="flex:1">${it.text}</div>
       <div style="display:flex;gap:4px">
         <button class="btn icon sm" onclick="editIPCItem('${it.id}')">✏️</button>
         <button class="btn icon sm" onclick="deleteRecord('ipc_checklist_items','${it.id}',renderIPCChecklistSetup)">🗑️</button>
@@ -13797,9 +13948,12 @@ function renderIPCChecklistSetup(){
 }
 
 function openIPCCategoryModal(){
+  const deptSel = document.getElementById('ipca-setup-dept-select');
+  if(!deptSel || !deptSel.value){ toast('Please select a department first','error'); return; }
   document.getElementById('f-ipcc-id').value = '';
+  document.getElementById('f-ipcc-department-id').value = deptSel.value;
   document.getElementById('f-ipcc-name').value = '';
-  document.getElementById('t-ipc-category').textContent = 'New Checklist Category';
+  document.getElementById('t-ipc-category').textContent = 'New IPC Section';
   openModal('m-ipc-category');
 }
 
@@ -13807,31 +13961,34 @@ function editIPCCategory(id){
   const rec = DB.get('ipc_checklist_categories').find(c => c.id === id);
   if(!rec) return;
   document.getElementById('f-ipcc-id').value = rec.id;
+  document.getElementById('f-ipcc-department-id').value = rec.departmentId || '';
   document.getElementById('f-ipcc-name').value = rec.name;
-  document.getElementById('t-ipc-category').textContent = 'Edit Category';
+  document.getElementById('t-ipc-category').textContent = 'Edit IPC Section';
   openModal('m-ipc-category');
 }
 
 function saveIPCCategory(){
   const id = v('f-ipcc-id');
   const name = v('f-ipcc-name');
-  if(!name){ toast('Please enter a category name','error'); return; }
+  const departmentId = v('f-ipcc-department-id');
+  if(!name){ toast('Please enter a section name','error'); return; }
+  if(!departmentId){ toast('No department selected','error'); return; }
   const data = DB.get('ipc_checklist_categories');
-  const rec = { id: id || genId('IPCAT'), name, order: id ? (data.find(x=>x.id===id)||{}).order : data.length };
+  const deptOrderCount = data.filter(x => x.departmentId === departmentId).length;
+  const rec = { id: id || genId('IPCAT'), departmentId, name, order: id ? (data.find(x=>x.id===id)||{}).order : deptOrderCount };
   const idx = data.findIndex(x => x.id === rec.id);
   if(idx >= 0) data[idx] = rec; else data.push(rec);
   DB.set('ipc_checklist_categories', data);
   sbSet('ipc_checklist_categories', data);
   closeModal('m-ipc-category');
   renderIPCChecklistSetup();
-  toast('✅ Category saved','success');
+  toast('✅ Section saved','success');
 }
 
 function openIPCItemModal(categoryId){
   document.getElementById('f-ipci-id').value = '';
   document.getElementById('f-ipci-category-id').value = categoryId;
   document.getElementById('f-ipci-text').value = '';
-  document.getElementById('f-ipci-max').value = '5';
   document.getElementById('t-ipc-item').textContent = 'New Checklist Item';
   openModal('m-ipc-item');
 }
@@ -13842,7 +13999,6 @@ function editIPCItem(id){
   document.getElementById('f-ipci-id').value = rec.id;
   document.getElementById('f-ipci-category-id').value = rec.categoryId;
   document.getElementById('f-ipci-text').value = rec.text;
-  document.getElementById('f-ipci-max').value = rec.maxScore;
   document.getElementById('t-ipc-item').textContent = 'Edit Checklist Item';
   openModal('m-ipc-item');
 }
@@ -13850,11 +14006,10 @@ function editIPCItem(id){
 function saveIPCItem(){
   const id = v('f-ipci-id');
   const text = v('f-ipci-text');
-  const maxScore = parseFloat(v('f-ipci-max')) || 1;
   const categoryId = v('f-ipci-category-id');
   if(!text){ toast('Please enter the checklist item text','error'); return; }
   const data = DB.get('ipc_checklist_items');
-  const rec = { id: id || genId('IPCI'), categoryId, text, maxScore, order: id ? (data.find(x=>x.id===id)||{}).order : data.filter(x=>x.categoryId===categoryId).length };
+  const rec = { id: id || genId('IPCI'), categoryId, text, order: id ? (data.find(x=>x.id===id)||{}).order : data.filter(x=>x.categoryId===categoryId).length };
   const idx = data.findIndex(x => x.id === rec.id);
   if(idx >= 0) data[idx] = rec; else data.push(rec);
   DB.set('ipc_checklist_items', data);
@@ -13910,10 +14065,11 @@ function saveIPCItem(){
 
 <div id="m-ipc-category" class="modal-overlay">
 <div class="modal">
-  <div class="modal-header"><div class="modal-header-icon" style="background:var(--teal-l)">📋</div><h3 id="t-ipc-category">New Checklist Category</h3><button class="btn icon" onclick="closeModal('m-ipc-category')">✕</button></div>
+  <div class="modal-header"><div class="modal-header-icon" style="background:var(--teal-l)">📋</div><h3 id="t-ipc-category">New IPC Section</h3><button class="btn icon" onclick="closeModal('m-ipc-category')">✕</button></div>
   <div class="modal-body">
     <input type="hidden" id="f-ipcc-id">
-    <div class="form-row"><div class="form-group"><label class="required">Category Name</label><input type="text" id="f-ipcc-name" placeholder="e.g. Hand Hygiene, PPE Compliance"></div></div>
+    <input type="hidden" id="f-ipcc-department-id">
+    <div class="form-row"><div class="form-group"><label class="required">Section Name</label><input type="text" id="f-ipcc-name" placeholder="e.g. Hand Hygiene, PPE Compliance"></div></div>
   </div>
   <div class="modal-footer"><button class="btn" onclick="closeModal('m-ipc-category')">Cancel</button><button class="btn primary" onclick="saveIPCCategory()">💾 Save</button></div>
 </div>
@@ -13926,7 +14082,7 @@ function saveIPCItem(){
     <input type="hidden" id="f-ipci-id">
     <input type="hidden" id="f-ipci-category-id">
     <div class="form-row"><div class="form-group" style="flex:1"><label class="required">Checklist Item</label><textarea id="f-ipci-text" rows="2" placeholder="e.g. Hand sanitizer available at point of care"></textarea></div></div>
-    <div class="form-row"><div class="form-group"><label class="required">Maximum Score</label><input type="number" id="f-ipci-max" min="1" max="100" placeholder="e.g. 5"></div></div>
+    <div style="background:var(--teal-l);border-radius:8px;padding:8px 12px;font-size:11.5px;color:var(--teal-d)">Scoring: ✓ Present/Compliant = 2 pts &nbsp;·&nbsp; ✗ Not Present = 0 pts &nbsp;·&nbsp; N/A = excluded</div>
   </div>
   <div class="modal-footer"><button class="btn" onclick="closeModal('m-ipc-item')">Cancel</button><button class="btn primary" onclick="saveIPCItem()">💾 Save</button></div>
 </div>
@@ -13940,7 +14096,7 @@ function saveIPCItem(){
 
     <div class="form-section">📍 Audit Details</div>
     <div class="form-row">
-      <div class="form-group"><label class="required">Department</label><select id="f-ipca-dept"></select></div>
+      <div class="form-group"><label class="required">Department</label><select id="f-ipca-dept" onchange="onIPCAuditDeptChange()"></select></div>
       <div class="form-group"><label class="required">Frequency</label><select id="f-ipca-freq"><option>Weekly</option><option>Monthly</option></select></div>
     </div>
     <div class="form-row">
