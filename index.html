@@ -13895,13 +13895,23 @@ function saveIPCDept(){
 }
 
 // ── SETUP: CHECKLIST CATEGORIES & ITEMS ──────────────────────────────────
+let _ipcaSetupSelectedDeptId = null; // persists across re-renders (incl. background sync polling)
+
 function renderIPCChecklistSetup(){
   const el = document.getElementById('ipca-checklist-list');
   if(!el) return;
 
-  // Department selector to scope which department's sections/items are being edited
+  // Capture the user's current selection BEFORE we rebuild anything, so a
+  // background re-render (e.g. the 30s sync poller calling renderPage again)
+  // can never silently reset it back to the default department.
+  const selectEl = document.getElementById('ipca-setup-dept-select');
+  if(selectEl && selectEl.value) _ipcaSetupSelectedDeptId = selectEl.value;
+
   const depts = DB.get('ipc_departments');
-  const selectedId = document.getElementById('ipca-setup-dept-select') ? document.getElementById('ipca-setup-dept-select').value : (depts[0]||{}).id;
+  const selectedId = _ipcaSetupSelectedDeptId && depts.some(d => d.id === _ipcaSetupSelectedDeptId)
+    ? _ipcaSetupSelectedDeptId
+    : (depts[0]||{}).id;
+  _ipcaSetupSelectedDeptId = selectedId;
 
   const selectorHtml = `<div style="margin-bottom:10px;display:flex;gap:8px;align-items:center;flex-wrap:wrap">
     <label style="font-size:12px;color:var(--txt2)">Department:</label>
