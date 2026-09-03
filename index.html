@@ -11566,7 +11566,7 @@ function renderMRR(){
   var yrEl=document.getElementById('mrr-year-filter');
   var yr=yrEl?yrEl.value:'';
   var search=(document.getElementById('mrr-search')||{value:''}).value.toLowerCase();
-  var data=DB.get('mrr').filter(function(r){return (!yr||String(r.year)===yr)&&(!search||(r.period||'').toLowerCase().includes(search));}).sort(function(a,b){return (parseInt(a.week)||0)-(parseInt(b.week)||0);});
+  var data=DB.get('mrr').filter(function(r){return (!yr||String(r.year)===yr)&&(!search||(r.period||'').toLowerCase().includes(search));}).sort(function(a,b){return (parseInt(b.year)||0)-(parseInt(a.year)||0) || (parseInt(b.week)||0)-(parseInt(a.week)||0);});
   var tb=document.getElementById('tb-mrr');if(!tb)return;
   var b='width:30px;height:30px;border-radius:6px;border:none;cursor:pointer;font-size:15px;padding:0;';
   tb.innerHTML=data.map(function(r){
